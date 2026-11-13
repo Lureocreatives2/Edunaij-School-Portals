@@ -1,0 +1,78 @@
+{% extends 'dashboard.html' %}
+
+{% block dashboard-body %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index_view' %}">Dashboard</a></li>
+        <li class="breadcrumb-item">Administrative</li>
+        <li class="breadcrumb-item active" aria-current="page">Groups</li>
+    </ol>
+</nav>
+
+<h4>Groups</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table border">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Group Name</th>
+                        <th scope="col">Users In Group</th>
+                        <th scope="col">Created By</th>
+                        <th scope="col">Permissions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group in groups %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>{{ group.user_set.all.count  }}</td>
+                        <td>{{ group.group_creator }}</td>
+                        <td>
+                            <div class="group-table-perms">
+                                {% for perm in group.permissions.all %}
+                                    <p>{{ perm.name }}</p>
+                                {% endfor %}
+
+                                <div class="table-td-show-more">
+                                    <i class="fas fa-chevron-circle-down"></i>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">No data found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+    const permsTd = $('.table-td-show-more');
+
+    const toggleHeight = (element) => {
+        const currentHeight = element.style.height;
+        if (currentHeight == '100%') {
+            element.style.height = '100px';
+        } else {
+            element.style.height = '100%';
+        }
+    }
+
+    permsTd.map(function(cell){
+        const cellElem = permsTd[cell];
+        cellElem.addEventListener('click', function(e){
+            element = this.parentElement
+            toggleHeight(element);
+        })
+    })
+
+</script>
+{% endblock %}

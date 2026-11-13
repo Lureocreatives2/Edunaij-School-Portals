@@ -1,0 +1,19 @@
+<aside class="nc-sidebar" id="school-navigation" aria-label="Main navigation">
+<a class="nc-brand" href="{% if request.user.is_staff %}{% url 'index_view' %}{% else %}{% url 'portal_home' %}{% endif %}"><span class="nc-mark">{{ request_institute.name|slice:':1'|default:'S' }}</span><span>{{ request_institute.name|default:'School workspace' }}<small>School management workspace</small></span></a>
+<div class="nc-school-switch"><span class="nc-dot"></span><span>{{ request_institute.name|default:'Your school' }}</span></div>
+<div class="nc-nav-label">Workspace</div><nav class="nc-nav">
+<a href="{% if request.user.is_staff %}{% url 'index_view' %}{% else %}{% url 'portal_home' %}{% endif %}">{% include 'ui/icon.html' with name='grid' %} Overview</a>
+{% if request.user.is_staff %}
+<a href="{% url 'students:all_student' %}">{% include 'ui/icon.html' with name='users' %} Students</a>
+<a href="{% url 'teachers:all_teacher' %}">{% include 'ui/icon.html' with name='users' %} Teachers</a>
+<a href="{% url 'academics:setup_hub' %}">{% include 'ui/icon.html' with name='book' %} Academics</a>
+<a href="{% url 'students:all_applicants' %}">{% include 'ui/icon.html' with name='calendar' %} Admissions</a>
+<a href="{% url 'result:result_home' %}">{% include 'ui/icon.html' with name='chart' %} Results</a>
+<a href="{% url 'billing_dashboard' %}">{% include 'ui/icon.html' with name='wallet' %} Billing & subscription</a>
+{% endif %}
+{% if request.user.student_record %}<a href="{% url 'learning:student_assignments' %}">{% include 'ui/icon.html' with name='book' %} My assignments</a>{% endif %}
+{% if request.user.teacher_record %}<a href="{% url 'learning:teacher_assignments' %}">{% include 'ui/icon.html' with name='book' %} Teaching</a>{% endif %}
+{% if request.user.guardian_profile %}<a href="{% url 'parents:parent_dashboard' %}">{% include 'ui/icon.html' with name='users' %} My children</a>{% endif %}
+</nav>
+{% if request.user.is_staff %}<div class="nc-nav-label">Administration</div><nav class="nc-nav"><a href="{% url 'institute:onboarding_step1' %}">{% include 'ui/icon.html' with name='settings' %} School settings</a>{% if request.user.is_superuser %}<a href="{% url 'platform:overview' %}">{% include 'ui/icon.html' with name='shield' %} Platform administration</a>{% endif %}</nav>{% endif %}
+<div class="nc-sidebar-bottom"><div class="nc-help"><strong>A place for every school day.</strong>Your people, learning and school records, together.</div><nav class="nc-nav"><a href="{% url 'pages:landing' %}">{% include 'ui/icon.html' with name='arrow' %} School website</a><a href="{% url 'account_logout' %}">Sign out</a></nav></div></aside>

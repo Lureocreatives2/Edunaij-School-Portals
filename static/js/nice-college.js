@@ -1,0 +1,11 @@
+document.addEventListener('DOMContentLoaded',()=>{
+const toggle=document.querySelector('[data-menu-toggle]');
+function closeMenu(){document.body.classList.remove('nc-menu-open');toggle?.setAttribute('aria-expanded','false');toggle?.setAttribute('aria-label','Open navigation')}
+toggle?.addEventListener('click',()=>{const open=document.body.classList.toggle('nc-menu-open');toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation')});
+document.querySelector('[data-menu-close]')?.addEventListener('click',closeMenu);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('nc-menu-open')){closeMenu();toggle?.focus()}});
+const candidates=Array.from(document.querySelectorAll('.nc-nav a')).map(link=>({link,path:new URL(link.href).pathname})).filter(({path})=>location.pathname===path||(path!=='/dashboard/'&&path!=='/'&&location.pathname.startsWith(path))).sort((a,b)=>b.path.length-a.path.length);
+if(candidates.length){candidates[0].link.classList.add('is-active');candidates[0].link.setAttribute('aria-current','page')}
+document.querySelectorAll('[data-table-search]').forEach(input=>input.addEventListener('input',()=>{const table=document.getElementById(input.dataset.tableSearch);const rows=Array.from(table?.querySelectorAll('tbody tr[data-search-row]')||[]);const term=input.value.toLowerCase();rows.forEach(row=>{row.hidden=!row.textContent.toLowerCase().includes(term)});if(rows.length){let empty=table.querySelector('[data-search-empty]');if(!empty){empty=document.createElement('tr');empty.setAttribute('data-search-empty','');const cell=document.createElement('td');cell.colSpan=table.querySelectorAll('thead th').length;cell.textContent='No matching students. Try another name or ID.';cell.setAttribute('role','status');empty.append(cell);table.querySelector('tbody').append(empty)}empty.hidden=rows.some(row=>!row.hidden)}}));
+document.querySelector('[data-show-password]')?.addEventListener('change',e=>{document.querySelectorAll('input[name=password],input[name=password1],input[name=password2]').forEach(field=>{field.type=e.target.checked?'text':'password'})});
+});

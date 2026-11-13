@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+{% block content %}<main class="container py-5"><h1>Application received</h1>
+<p>Thank you, {{ applicant.name }}. Your application has been saved for {{ institute.name }}.</p>
+{% if checkout_available %}<p>Admission fee: NGN {{ institute.admission_fee }}</p>
+<form method="post" action="{% url 'payments:paystack_initiate' %}">{% csrf_token %}<input type="hidden" name="student_id" value="{{ applicant.pk }}"><button class="btn btn-primary" type="submit">Pay admission fee</button></form>
+{% else %}<p>Online payment is not available yet. Please contact the school for payment instructions.</p>{% endif %}
+</main>{% endblock %}

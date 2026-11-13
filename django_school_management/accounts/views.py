@@ -1,0 +1,271 @@
+from rolepermissions.roles import assign_role
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.exceptions import PermissionDenied
+from django.views.decorators.http import require_POST
+from django.views.decorators.cache import never_cache
+from django_school_management.tenants.scoping import request_institute
+from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import ListView
+from django.views.generic.edit import UpdateView
+from django.urls import reverse
+
+from django_school_management.academics.models import Department
+from django_school_management.institute.models import InstituteProfile
+from django_school_management.students.models import Student
+from django_school_management.teachers.models import Teacher
+from .constants import ProfileApprovalStatusEnum, AccountURLConstants
+from .forms import (
+    ProfileCompleteForm,
+    ApprovalProfileUpdateForm,
+    UserChangeFormDashboard, UserCreateFormDashboard
+)
+from django_school_management.mixins.no_permission import LoginRequiredNoPermissionMixin
+from .models import CustomGroup, User
+from .forms import (CommonUserProfileForm,
+    UserProfileSocialLinksFormSet
+)
+from .services.common import profile_not_approved, map_profile_approval_status_message
+from permission_handlers.administrative import (
+    user_is_admin_or_su,
+)
+from permission_handlers.basic import user_is_verified
+from .services.profile_complete import ProfileCompleteService
+
+@login_required(login_url='account_login')
+def profile_complete(request):
+    ctx = {}
+    user = User.objects.get(pk=request.user.pk)
+
+    if profile_not_approved(request.user):
+        messages.add_message(
+            request,
+            messages.INFO,
+            map_profile_approval_status_message(request.user.approval_status)
+        )
+    else:
+        profile_edit_form = CommonUserProfileForm(
+            instance=user.profile
+        )
+        social_links_form = UserProfileSocialLinksFormSet(
+            instance=user.profile
+        )
+        ctx.update({
+            'profile_edit_form': profile_edit_form,
+            'social_links_form': social_links_form
+        })
+
+    if request.method == 'POST':
+        profile_service = ProfileCompleteService(request, user, messages)
+        profile_service.handle_profile_update()
+
+    user_permissions = user.user_permissions.all()
+    ctx.update({
+        'verification_form': ProfileCompleteForm(instance=user),
+        'user_perms': user_permissions if user_permissions else None,
+    })
+    return render(request, 'account/profile_complete.html', ctx)
+
+@never_cache
+@login_required(login_url='account_login')
+def dashboard(request):
+    user = request.user
+    if not user.is_active or not (user.is_superuser or (user.is_staff and user_is_admin_or_su(user))):
+        raise PermissionDenied('School administrator access is required.')
+    institute = request_institute(request)
+    if not user.is_superuser and user.institute_id != institute.pk:
+        raise PermissionDenied('A school administrator must be assigned to this school.')
+    total_students = Student.objects.filter(
+        admission_student__department_choice__institute=institute
+    ).count()
+    total_teachers = Teacher.objects.filter(institute=institute).count()
+    total_departments = Department.objects.filter(institute=institute).count()
+    from django_school_management.parents.models import Guardian
+    offered_classes = institute.offered_classes.all()
+    total_classes = len(offered_classes)
+    total_parents = Guardian.objects.filter(tenant=request.tenant).count()
+    recent_students = Student.objects.filter(admission_student__department_choice__institute=institute).select_related('admission_student', 'academic_class').order_by('-created')[:5]
+    setup_steps = [
+        {'label': 'Create school profile', 'done': bool(institute)},
+        {'label': 'Choose your classes', 'done': total_classes > 0},
+        {'label': 'Set academic session', 'done': bool(institute and institute.current_session_id)},
+        {'label': 'Add teaching staff', 'done': total_teachers > 0},
+        {'label': 'Enroll your first student', 'done': total_students > 0},
+    ]
+    setup_done = sum(step['done'] for step in setup_steps)
+    context = {
+        'total_students': total_students, 'total_teachers': total_teachers,
+        'total_departments': total_departments, 'total_parents': total_parents,
+        'total_classes': total_classes, 'offered_classes': offered_classes,
+        'recent_students': recent_students, 'setup_steps': setup_steps,
+        'setup_done': setup_done, 'setup_percent': setup_done * 20,
+    }
+    return render(request, 'dashboard.html', context)
+
+def school_accounts(request):
+    institute = request_institute(request)
+    return User.objects.filter(tenant=request.tenant, institute=institute, is_superuser=False)
+
+
+def require_account_admin(request):
+    if not request.user.is_authenticated or not (request.user.is_superuser or
+            (request.user.is_staff and user_is_admin_or_su(request.user))):
+        raise PermissionDenied('School account administrator access is required.')
+    return school_accounts(request)
+
+
+class SchoolAccountScopeMixin:
+    def get_queryset(self):
+        return super().get_queryset().filter(pk__in=school_accounts(self.request).values('pk'))
+
+
+@login_required(login_url=AccountURLConstants.permission_error)
+@user_passes_test(user_is_admin_or_su, login_url=AccountURLConstants.permission_error)
+@require_POST
+def user_approval(request, pk, approved):
+    """ Approve or decline approval request based on parameter `approved`.
+    approved=0 means decline, 1 means approve.
+    """
+    user = get_object_or_404(require_account_admin(request), pk=pk)
+    requested_role = user.requested_role
+
+    if approved:
+        assign_role(user, requested_role)
+        if requested_role == 'admin':
+            user.is_staff = True
+        user.approval_status = 'a'
+        if request.user.institute and not user.institute:
+            user.institute = request.user.institute
+        user.save()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f'{user}\'s account has been approved.'
+        )
+    else:
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f'{user}\'s request for {requested_role} has been declined.'
+        )
+    return redirect(AccountURLConstants.user_requests)
+
+@login_required(login_url=AccountURLConstants.permission_error)
+@user_passes_test(user_is_admin_or_su, login_url=AccountURLConstants.permission_error)
+def user_approval_with_modification(request, pk):
+    user = get_object_or_404(require_account_admin(request), pk=pk)
+    form = ApprovalProfileUpdateForm()
+    if request.method == 'POST':
+        form = ApprovalProfileUpdateForm(request.POST, instance=user)
+        if not form.is_valid():
+            return render(request, 'account/modify_approval.html', {'form': form}, status=400)
+        requested_role = form.cleaned_data['requested_role']
+        user.requested_role = requested_role
+        assign_role(user, requested_role)
+        if requested_role == 'admin':
+            user.is_staff = True
+        user.approval_status = 'a'
+        if request.user.institute and not user.institute:
+            user.institute = request.user.institute
+        user.save()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f'{user}\'s account has been approved.'
+        )
+        return redirect(AccountURLConstants.user_requests)
+    ctx = {
+        'form': form,
+    }
+    return render(request, 'account/modify_approval.html', ctx)
+
+@login_required(login_url=AccountURLConstants.permission_error)
+@user_passes_test(user_is_admin_or_su, login_url=AccountURLConstants.permission_error)
+def add_user_view(request):
+    institute = request_institute(request)
+    require_account_admin(request)
+    context = dict()
+    if request.method == 'POST':
+        user_form = UserCreateFormDashboard(request.POST)
+        if user_form.is_valid():
+            user = user_form.save(commit=False)
+            user.tenant = request.tenant
+            user.institute = institute
+            user.save()
+            user_form.save_m2m()
+            return redirect(AccountURLConstants.all_accounts)
+        else:
+            context['user_form'] = user_form
+            return render(request, 'academics/add_user.html', context)
+    else:
+        user_form = UserCreateFormDashboard()
+        context['user_form'] = user_form
+        return render(request, 'academics/add_user.html', context)
+
+class AccountListView(SchoolAccountScopeMixin, LoginRequiredNoPermissionMixin, UserPassesTestMixin, ListView):
+    model = User
+    queryset = User.objects.exclude(is_superuser=True)
+    template_name = 'account/dashboard/accounts_list.html'
+    context_object_name = 'accounts'
+
+    def test_func(self):
+        user =  self.request.user
+        return user_is_verified(user)
+
+class GroupListView(LoginRequiredNoPermissionMixin, UserPassesTestMixin, ListView):
+    model = CustomGroup
+    template_name = 'academics/group_list.html'
+    context_object_name = 'groups'
+
+    def test_func(self):
+        user =  self.request.user
+        return user_is_verified(user)
+
+class UserRequestsListView(SchoolAccountScopeMixin, UserPassesTestMixin, ListView):
+    queryset = User.objects.exclude(approval_status=ProfileApprovalStatusEnum.approved.value)
+    template_name = 'account/user_requests.html'
+    context_object_name = 'users'
+
+    def test_func(self):
+        user =  self.request.user
+        return user_is_admin_or_su(user)
+
+user_requests_list = UserRequestsListView.as_view()
+
+def profile_picture_upload(request):
+    """
+    Handles profile pic uploads coming through ajax.
+    """
+    if request.method == 'POST':
+        image = request.FILES.get('profile-picture')
+        try:
+            request.user.profile.profile_picture = image
+            request.user.profile.save()
+            return JsonResponse({
+                'status': 'ok',
+                'imgUrl': request.user.profile.profile_picture.url,
+            })
+        except:
+            return JsonResponse({'status': 'error'})
+
+class UserUpdateView(SchoolAccountScopeMixin, LoginRequiredNoPermissionMixin, UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        require_account_admin(self.request)
+        return True
+
+    form_class = UserChangeFormDashboard
+    queryset = User.objects.all()
+    template_name = 'account/dashboard/update_user.html'
+
+    def get_success_url(self):
+        return reverse(
+            'articles:author_profile',
+            args=[self.object.username,])
+from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Count, Sum, Q
+from django.utils import timezone
+from datetime import timedelta
+

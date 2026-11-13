@@ -1,0 +1,7 @@
+{% extends 'portals/base.html' %}
+{% block portal_content %}<h1>Parent portal</h1><p>{{ tenant.name }} · {{ guardian.user.get_full_name|default:guardian.user.username }}</p>
+{% for link in wards %}<article class="record"><h2>{{ link.student.admission_student.name }}</h2>
+<p>{{ link.student.academic_class|default:'Class not assigned' }} · {{ link.get_relationship_display }}</p>
+<p>Student ID: {{ link.student.temporary_id|default:'Not assigned' }}</p>
+<a class="btn btn-primary" href="{% url 'parents:child_progress' link.student_id %}">View progress and receipts</a></article>
+{% empty %}<p>No children are linked to this account. Contact the school to arrange access.</p>{% endfor %}{% endblock %}

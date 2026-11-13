@@ -1,0 +1,136 @@
+{% extends 'website/partials/website_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block extra_css %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .selection { width: 100% !important; }
+        #id_current_address, #id_permanent_address { max-height: 75px; }
+        #admission-form-main .form-group label { font-weight: 600; color: #334155; }
+        .admission-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+        .side-panel {
+            background: linear-gradient(165deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(15, 118, 110, 0.25);
+            color: #fff;
+        }
+        .side-panel .illus {
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            opacity: 0.9;
+        }
+        .side-panel .content { padding: 1.5rem 1.5rem 2rem; }
+        .side-panel h5 { font-weight: 700; margin-bottom: 0.75rem; font-size: 1.15rem; }
+        .side-panel p { font-size: 0.9rem; opacity: 0.95; line-height: 1.6; margin-bottom: 1rem; }
+        .side-panel .highlight { background: rgba(255,255,255,0.2); padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.85rem; margin-top: 1rem; }
+        .btn-submit-admission { padding: 0.6rem 2rem; font-weight: 600; border-radius: 10px; }
+    </style>
+{% endblock %}
+
+{% block main_content %}
+    {% include 'website/partials/website_navbar.html' %}
+    <div id="admission-header" class="text-light py-5 text-center" style="background: linear-gradient(95deg, #0f766e 30%, #14b8a6 100%);">
+        <div class="container">
+            <div class="row mt-4 mt-md-5">
+                <div class="col-12">
+                    <h2 class="text-light mb-2">Admission Form</h2>
+                    <p class="text-light mb-0 opacity-90">Please fill in the form with correct information. We will contact you soon.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="admission-form-main" class="py-4 py-md-5">
+        <div class="container">
+            {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Please correct the errors below.</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <div class="admission-card">
+                        <form id="admission-form" action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-success btn-submit-admission">Submit Application</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="side-panel">
+                        <div class="illus"><span aria-hidden="true">🎓</span></div>
+                        <div class="content">
+                            <h5>এক ক্লিকেই ভর্তি আবেদন</h5>
+                            <p>সঠিক তথ্য দিলেই চলবে। ভর্তি প্রক্রিয়া সহজ ও দ্রুত রাখাই আমাদের লক্ষ্য।</p>
+                            <p class="mb-0">Good luck with your application! আমরা আপনার সাফল্য কামনা করি।</p>
+                            <div class="highlight">
+                                <strong>Need help?</strong> Contact the admission office or visit the campus. We're here to help.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script>
+        $('input[type="file"]').change(function(e){
+            var fileName = e.target.files[0] ? e.target.files[0].name : '';
+            $(this).next('.custom-file-label').html(fileName);
+        });
+        $(document).ready(function() {
+            $('#id_city').select2();
+        });
+
+        {% if show_jsc_conditional %}
+        (function() {
+            var jscIds = ['div_id_board', 'div_id_ssc_roll', 'div_id_ssc_registration', 'div_id_gpa'];
+            function toggleJscSection() {
+                var val = parseInt($('#id_applying_for_class').val(), 10);
+                var show = (val === 9 || val === 10);
+                jscIds.forEach(function(id) {
+                    var el = document.getElementById(id);
+                    if (el) el.style.display = show ? '' : 'none';
+                });
+            }
+            $(document).ready(function() {
+                toggleJscSection();
+                $('#id_applying_for_class').on('change', toggleJscSection);
+            });
+        })();
+        {% endif %}
+
+        {% if show_admit_semester_conditional %}
+        (function() {
+            function toggleAdmitSemester() {
+                var group = $('#id_group').val();
+                var exam = $('#id_exam_name').val();
+                var show = (group === 'Science' && exam === 'HSC');
+                var el = document.getElementById('div_id_admit_to_semester');
+                if (el) el.style.display = show ? '' : 'none';
+            }
+            $(document).ready(function() {
+                toggleAdmitSemester();
+                $('#id_group, #id_exam_name').on('change', toggleAdmitSemester);
+            });
+        })();
+        {% endif %}
+    </script>
+{% endblock %}

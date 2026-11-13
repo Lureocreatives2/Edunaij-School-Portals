@@ -1,0 +1,679 @@
+from datetime import date, timedelta, datetime
+from collections import OrderedDict
+
+from django.contrib import messages
+from django.db import transaction
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseNotFound, JsonResponse
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, UpdateView
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+from django_school_management.academics.models import (
+    Department,
+    Semester,
+    Batch,
+    AcademicSession,
+)
+from django_school_management.mixins.no_permission import (
+    LoginRequiredNoPermissionMixin,
+)
+from django_school_management.result.models import SubjectGroup
+from django_school_management.students.models import (
+    Student,
+    AdmissionStudent,
+    CounselingComment,
+)
+from django_school_management.students.forms import (
+    StudentForm,
+    AdmissionForm,
+    StudentRegistrantUpdateForm,
+    CounselingDataForm,
+    StudentUpdateForm,
+)
+from django_school_management.students.filters import AlumniFilter
+from django_school_management.students.tasks import (
+    send_admission_confirmation_email,
+)
+from permission_handlers.administrative import (
+    user_is_admin_su_or_ac_officer,
+)
+from permission_handlers.basic import user_is_student, user_is_teacher, user_is_verified
+from django_school_management.tenants.scoping import request_institute
+from django_school_management.mixins.institute import InstituteScopedQuerysetMixin
+from django.views.decorators.http import require_POST
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def students_dashboard_index(request):
+    """
+    Dashboard for online admission system.
+    """
+    institute = request_institute(request)
+
+    # List of months since first application registration date
+    try:
+        first_application_date = datetime.strftime(
+            datetime.now() - timedelta(days=365), "%Y-%m-%d"
+        )
+        last_application_date = date.today()
+        dates = [str(first_application_date), str(last_application_date)]
+        months_start, months_end = [
+            datetime.strptime(_, "%Y-%m-%d") for _ in dates
+        ]
+        month_list = OrderedDict(
+            ((months_start + timedelta(_)).strftime(r"%B-%Y"), None)
+            for _ in range((months_end - months_start).days)
+        ).keys()
+    except IndexError:
+        month_list = []
+
+    base_qs = AdmissionStudent.objects.filter(assigned_as_student=False)
+    if institute:
+        base_qs = base_qs.filter(department_choice__institute=institute)
+
+    unpaid_registrants = base_qs.filter(paid=False)
+    all_applicants = base_qs.order_by("-created")
+    admitted_students = base_qs.filter(admitted=True, paid=True)
+    paid_registrants = base_qs.filter(paid=True, admitted=False)
+    rejected_applicants = base_qs.filter(rejected=True)
+    offline_applicants = base_qs.filter(application_type="2")
+
+    context = {
+        "all_applicants": all_applicants,
+        "unpaid_registrants": unpaid_registrants,
+        "admitted_students": admitted_students,
+        "paid_registrants": paid_registrants,
+        "rejected_applicants": rejected_applicants,
+        "offline_applicants": offline_applicants,
+        "month_list": month_list,
+        "show_counsel_reports": institute and institute.is_polytechnic,
+    }
+    return render(request, "students/dashboard_index.html", context)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def all_applicants(request):
+    """Display all registered students list"""
+    institute = request_institute(request)
+    registrants = AdmissionStudent.objects.all().order_by("-created")
+    if institute:
+        registrants = registrants.filter(department_choice__institute=institute)
+    ctx = {
+        "registrants": registrants,
+    }
+    return render(request, "students/all_applicants.html", ctx)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def admitted_students_list(request):
+    """
+    Returns list of students admitted from online registration.
+    """
+    institute = request_institute(request)
+    admitted_students = AdmissionStudent.objects.filter(
+        admitted=True, paid=True, assigned_as_student=False
+    )
+    if institute:
+        admitted_students = admitted_students.filter(
+            choosen_department__institute=institute
+        )
+    context = {
+        "admitted_students": admitted_students,
+    }
+    return render(
+        request, "students/dashboard_all_cleared_students.html", context
+    )
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def paid_registrants(request):
+    """
+    Returns list of students already paid from online registration.
+    """
+    institute = request_institute(request)
+    paid_students = AdmissionStudent.objects.filter(paid=True, admitted=False)
+    if institute:
+        paid_students = paid_students.filter(
+            department_choice__institute=institute
+        )
+    context = {
+        "paid_students": paid_students,
+    }
+    return render(request, "students/dashboard_paid_students.html", context)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def unpaid_registrants(request):
+    """
+    Returns list of students haven't paid admission fee yet.
+    """
+    institute = request_institute(request)
+    unpaid_registrants_list = AdmissionStudent.objects.filter(paid=False)
+    if institute:
+        unpaid_registrants_list = unpaid_registrants_list.filter(
+            department_choice__institute=institute
+        )
+    context = {
+        "unpaid_applicants": unpaid_registrants_list,
+    }
+    return render(request, "students/unpaid_applicants.html", context)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def rejected_registrants(request):
+    institute = request_institute(request)
+    rejected = AdmissionStudent.objects.filter(rejected=True)
+    if institute:
+        rejected = rejected.filter(department_choice__institute=institute)
+    ctx = {
+        "rejected_registrants": rejected,
+    }
+    return render(request, "students/list/rejected_registrants.html", ctx)
+
+
+def get_json_batch_data(request, *args, **kwargs):
+    """Return batches for the given department, restricted to the active academic session."""
+    selected_department_code = kwargs.get("department_code")
+    institute = request_institute(request)
+    if institute and institute.current_session_id:
+        active_session = institute.current_session
+    else:
+        active_session = AcademicSession.objects.order_by("-year").first()
+    qs = Batch.objects.filter(department__code=selected_department_code, department__institute=request_institute(request))
+    if active_session:
+        qs = qs.filter(year=active_session)
+    department_batches = list(qs.values())
+    return JsonResponse({"data": department_batches})
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def admission_confirmation(request):
+    """
+    Create student profiles from admitted applicants. Applicants are already
+    assigned to a department; filter by department (and batch for active session).
+    For school/madrasah: use institute's current_session. For polytechnic: use latest session.
+    """
+    institute = request_institute(request)
+    if institute and institute.current_session_id:
+        active_session = institute.current_session
+    else:
+        active_session = AcademicSession.objects.order_by("-year").first()
+
+    base_registrants = AdmissionStudent.objects.filter(
+        admitted=True, paid=True, rejected=False, assigned_as_student=False
+    )
+    if institute:
+        base_registrants = base_registrants.filter(
+            choosen_department__institute=institute
+        )
+    departments = Department.objects.filter(institute=request_institute(request)).order_by("name")
+    if institute:
+        departments = departments.filter(institute=institute)
+
+    department_id = request.GET.get("department_id")
+    batch_id_param = request.GET.get("batch_id")
+
+    if department_id:
+        try:
+            selected_department_id = int(department_id)
+            selected_registrants = base_registrants.filter(
+                choosen_department_id=selected_department_id
+            )
+            batches = (
+                Batch.objects.filter(
+                    department_id=selected_department_id,
+                    department__institute=institute,
+                    year=active_session,
+                )
+                .order_by("number")
+                if active_session
+                else Batch.objects.none()
+            )
+        except (ValueError, TypeError):
+            selected_department_id = None
+            selected_registrants = base_registrants.none()
+            batches = Batch.objects.none()
+    else:
+        selected_department_id = None
+        selected_registrants = base_registrants.none()
+        batches = Batch.objects.none()
+
+    try:
+        selected_batch_id_val = int(batch_id_param) if batch_id_param else None
+    except (ValueError, TypeError):
+        selected_batch_id_val = None
+
+    ctx = {
+        "departments": departments,
+        "active_session": active_session,
+        "no_active_session": active_session is None,
+        "selected_registrants": selected_registrants,
+        "selected_department_id": selected_department_id,
+        "selected_batch_id": selected_batch_id_val,
+        "batches": batches,
+        "department_label": institute.department_label if institute else "Department",
+        "semester_label": institute.semester_label if institute else "Semester",
+    }
+
+    if request.method == "POST":
+        batch_id = request.POST.get("batch_id")
+        checked_registrant_ids = [x.strip() for x in request.POST.getlist("registrant_choice") if x.strip()]
+
+        if not batch_id:
+            messages.error(request, "Please select a batch.")
+            return render(request, "students/list/confirm_admission.html", ctx)
+
+        if not checked_registrant_ids:
+            messages.error(request, "Please select at least one applicant.")
+            return render(request, "students/list/confirm_admission.html", ctx)
+
+        try:
+            batch = get_object_or_404(Batch, id=batch_id, department__institute=request_institute(request))
+        except (Batch.DoesNotExist, ValueError, TypeError):
+            messages.error(request, "Please select or create a batch first.")
+            return render(request, "students/list/confirm_admission.html", ctx)
+
+        session = batch.year
+        if active_session and session != active_session:
+            messages.error(
+                request,
+                "Selected batch is not in the current academic session.",
+            )
+            return render(request, "students/list/confirm_admission.html", ctx)
+
+        try:
+            ids = [int(x) for x in checked_registrant_ids]
+        except (ValueError, TypeError):
+            messages.error(request, "Invalid applicant selection.")
+            return render(request, "students/list/confirm_admission.html", ctx)
+
+        to_be_admitted = base_registrants.filter(id__in=ids)
+        invalid = to_be_admitted.exclude(choosen_department_id=batch.department_id)
+        if invalid.exists():
+            dept_label = institute.department_label if institute else "department"
+            messages.error(
+                request,
+                f"All selected applicants must belong to the chosen batch's {dept_label}.",
+            )
+            return render(request, "students/list/confirm_admission.html", ctx)
+
+        # Default semester/class 1; per-candidate admit_to_semester (e.g. 4 for HSC Science direct) when valid
+        default_semester_number = 1
+        semester_label = institute.semester_label if institute else "Semester"
+        try:
+            default_semester = Semester.objects.get(number=default_semester_number)
+        except Semester.DoesNotExist:
+            messages.error(
+                request,
+                f"{semester_label} {default_semester_number} not found! Please create it first.",
+            )
+            return render(request, "students/list/confirm_admission.html", ctx)
+
+        students = []
+        errors = []
+        with transaction.atomic():
+            for candidate in to_be_admitted:
+                try:
+                    sem_num = getattr(candidate, 'admit_to_semester', None)
+                    if sem_num not in (1, 2, 3, 4, 5, 6, 7, 8):
+                        sem_num = default_semester_number
+                    try:
+                        semester = Semester.objects.get(number=sem_num)
+                    except Semester.DoesNotExist:
+                        semester = default_semester
+                    student = Student.objects.create(
+                        admission_student=candidate,
+                        semester=semester,
+                        batch=batch,
+                        ac_session=session,
+                        admitted_by=request.user,
+                    )
+                    students.append(student)
+                except Exception as e:
+                    errors.append(f"{candidate.name}: {e}")
+
+        if students:
+            messages.success(
+                request, f"{len(students)} student(s) created successfully."
+            )
+        if errors:
+            for err in errors:
+                messages.error(request, err)
+
+        if students:
+            return redirect("students:admission_confirmation")
+        ctx["students"] = students
+        return render(request, "students/list/confirm_admission.html", ctx)
+
+    return render(request, "students/list/confirm_admission.html", ctx)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def admit_student(request, pk):
+    """
+    Admit applicant into chosen department.
+    For polytechnic: show form to set choosen_department (counselling).
+    For school/madrasah: no counselling; choosen_department is set to department_choice.
+    """
+    applicant = get_object_or_404(AdmissionStudent, pk=pk, department_choice__institute=request_institute(request))
+    institute = getattr(applicant.department_choice, 'institute', None) if applicant.department_choice_id else None
+    is_polytechnic = institute and institute.is_polytechnic
+
+    if request.method == "POST":
+        if is_polytechnic:
+            form = AdmissionForm(request.POST, instance=applicant)
+            if form.is_valid():
+                student = form.save(commit=False)
+                student.admitted = True
+                student.admission_date = date.today()
+                student.save()
+                try:
+                    send_admission_confirmation_email.delay(student.id)
+                except Exception:
+                    pass
+                messages.success(request, f"{applicant.name} has been admitted.")
+                return redirect("students:admitted_student_list")
+        else:
+            # School/madrasah: no department choice change; set choosen_department = department_choice
+            applicant.choosen_department = applicant.department_choice
+            applicant.admitted = True
+            applicant.admission_date = date.today()
+            applicant.save()
+            try:
+                send_admission_confirmation_email.delay(applicant.id)
+            except Exception:
+                pass
+            messages.success(request, f"{applicant.name} has been admitted.")
+            return redirect("students:admitted_student_list")
+    else:
+        form = AdmissionForm(instance=applicant) if is_polytechnic else None
+
+    context = {
+        "form": form,
+        "applicant": applicant,
+        "show_department_choice": is_polytechnic,
+        "department_label": institute.department_label if institute else "Department",
+    }
+    return render(request, "students/dashboard_admit_student.html", context)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def reject_applicant(request, pk):
+    """Reject an applicant with an optional reason."""
+    applicant = get_object_or_404(AdmissionStudent, pk=pk, department_choice__institute=request_institute(request))
+    if request.method == "POST":
+        applicant.rejected = True
+        applicant.admitted = False
+        applicant.save()
+        messages.success(request, f"{applicant.name} has been rejected.")
+    return redirect("students:all_applicants")
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def mark_as_paid_or_unpaid(request):
+    """Change student applicants payment status"""
+    if request.method == "POST":
+        registrant_pk = request.POST.get("registrant_id")
+        applicant = get_object_or_404(AdmissionStudent, pk=registrant_pk, department_choice__institute=request_institute(request))
+        if not applicant.paid:
+            # If applicant didn't pay fee already, change to paid
+            applicant.paid = True
+            applicant.save()
+            return JsonResponse({"data": True})
+        # If applicant already paid the amount, change to unpaid
+        applicant.paid = False
+        applicant.save()
+        return JsonResponse({"data": False})
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def update_online_registrant(request, pk):
+    """Update applicant details and counseling information (counseling only for polytechnic)."""
+    applicant = get_object_or_404(AdmissionStudent, pk=pk, department_choice__institute=request_institute(request))
+    institute = getattr(applicant.department_choice, 'institute', None) if applicant.department_choice_id else None
+    show_counseling = institute and institute.is_polytechnic
+
+    counseling_records = CounselingComment.objects.filter(
+        registrant_student=applicant
+    )
+    if request.method == "POST":
+        form = StudentRegistrantUpdateForm(
+            request.POST, request.FILES, instance=applicant,
+            show_choosen_department=show_counseling,
+        )
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{applicant.name} updated.")
+            return redirect("students:all_applicants")
+    else:
+        form = StudentRegistrantUpdateForm(
+            instance=applicant,
+            show_choosen_department=show_counseling,
+        )
+    counseling_form = CounselingDataForm()
+    context = {
+        "form": form,
+        "applicant": applicant,
+        "counseling_records": counseling_records,
+        "counseling_form": counseling_form,
+        "show_counseling": show_counseling,
+        "department_label": institute.department_label if institute else "Department",
+    }
+    return render(
+        request, "students/dashboard_update_online_applicant.html", context
+    )
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def add_counseling_data(request, student_id):
+    registrant = get_object_or_404(AdmissionStudent, id=student_id, department_choice__institute=request_institute(request))
+    institute = getattr(registrant.department_choice, 'institute', None) if registrant.department_choice_id else None
+    if institute and not institute.is_polytechnic:
+        return redirect("students:update_online_registrant", pk=student_id)
+    if request.method == "POST":
+        form = CounselingDataForm(request.POST)
+        if form.is_valid():
+            counseling_comment = form.save(commit=False)
+            counseling_comment.counselor = request.user
+            counseling_comment.registrant_student = registrant
+            counseling_comment.save()
+            return redirect("students:update_online_registrant", pk=student_id)
+    return redirect("students:update_online_registrant", pk=student_id)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def add_student_view(request):
+    """Offline admission form."""
+    institute = request_institute(request)
+    if request.method == "POST":
+        form = StudentForm(request.POST, request.FILES, institute=institute)
+        if form.is_valid():
+            student = form.save(commit=False)
+            student.application_type = "2"
+            student.save()
+            messages.success(request, f"{student.name} added as offline applicant.")
+            return redirect("students:all_applicants")
+    else:
+        form = StudentForm(institute=institute)
+    context = {"form": form}
+    return render(request, "students/addstudent.html", context)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def students_view(request):
+    """
+    :param request:
+    :return: renders student list with all department
+    and semesters list.
+    """
+    institute = request_institute(request)
+    all_students = Student.objects.select_related(
+        "admission_student", "semester", "ac_session"
+    ).all()
+    if institute:
+        all_students = all_students.filter(
+            admission_student__choosen_department__institute=institute
+        )
+    context = {
+        "students": all_students,
+    }
+    return render(request, "students/list/students_list.html", context)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+def students_by_department_view(request, pk):
+    dept_name = get_object_or_404(Department, pk=pk, institute=request_institute(request))
+    students = Student.objects.select_related(
+        "admission_student", "semester", "ac_session"
+    ).filter(admission_student__choosen_department=dept_name)
+    context = {
+        "students": students,
+    }
+    return render(request, "students/students_by_department.html", context)
+
+
+class StudentSchoolScopeMixin(InstituteScopedQuerysetMixin):
+    institute_field = 'admission_student__department_choice__institute'
+
+
+class StudentUpdateView(
+    StudentSchoolScopeMixin, LoginRequiredNoPermissionMixin, UserPassesTestMixin, UpdateView
+):
+    """
+    renders a student update form to update students details.
+    """
+
+    model = Student
+    form_class = StudentUpdateForm
+    template_name = "students/update_student.html"
+
+    def test_func(self):
+        user = self.request.user
+        return user_is_admin_su_or_ac_officer(user)
+
+    def get_success_url(self):
+        student_id = self.kwargs["pk"]
+        return reverse_lazy(
+            "students:student_sis", kwargs={"pk": student_id}
+        )
+
+
+class StudentSISView(
+    StudentSchoolScopeMixin, LoginRequiredNoPermissionMixin, UserPassesTestMixin, DetailView
+):
+    """Canonical Student Information System (SIS) dashboard for admins."""
+    model = Student
+    context_object_name = "student"
+    template_name = "students/student_sis.html"
+
+    def test_func(self):
+        user = self.request.user
+        return user_is_admin_su_or_ac_officer(user) or user_is_teacher(user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        student = context["student"]
+        sg = SubjectGroup.objects.filter(
+            department=student.admission_student.choosen_department,
+            semester=student.semester,
+        ).first()
+        context["subjects"] = sg
+        context["subjects_list"] = sg.subjects.all() if sg else []
+        context["results"] = student.results.select_related(
+            "subject", "semester", "exam"
+        ).order_by("-semester__number", "subject__name")
+        context["is_teacher_view"] = user_is_teacher(self.request.user)
+        if context["is_teacher_view"]:
+            from django.urls import reverse
+            context["action_items"] = [
+                {"url": reverse("students:all_student"), "label": "Back to list", "icon": "fas fa-list"},
+            ]
+        else:
+            context["action_items"] = self._get_action_items(student)
+        return context
+
+    def _get_action_items(self, student):
+        from django.urls import reverse
+        return [
+            {"url": reverse("students:update_student", kwargs={"pk": student.pk}), "label": "Edit profile", "icon": "fas fa-user-edit"},
+            {"url": reverse("result:result_entry") + f"?student={student.pk}", "label": "Add / edit result", "icon": "fas fa-pen-fancy"},
+            {"url": reverse("students:all_student"), "label": "Back to list", "icon": "fas fa-list"},
+            {"url": reverse("students:delete_student", kwargs={"pk": student.pk}), "label": "Delete student", "icon": "fas fa-trash-alt", "danger": True},
+        ]
+
+
+class StudentDetailsView(
+    StudentSchoolScopeMixin, LoginRequiredNoPermissionMixin, UserPassesTestMixin, DetailView
+):
+    model = Student
+
+    def test_func(self):
+        return user_is_admin_su_or_ac_officer(self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return redirect("students:student_sis", pk=self.object.pk)
+
+
+@user_passes_test(user_is_admin_su_or_ac_officer)
+@require_POST
+def student_delete_view(request, pk):
+    student = get_object_or_404(Student, pk=pk, admission_student__department_choice__institute=request_institute(request))
+    student.delete()
+    return redirect("students:all_student")
+
+
+class AlumnusListView(
+    LoginRequiredNoPermissionMixin, UserPassesTestMixin, ListView
+):
+    model = Student
+    context_object_name = "alumnus"
+    template_name = "students/list/alumnus.html"
+
+    def test_func(self):
+        user = self.request.user
+        return user_is_verified(user)
+
+    def get_queryset(self):
+        queryset = Student.alumnus.filter(admission_student__department_choice__institute=request_institute(self.request))
+        return queryset
+
+    def get_context_data(self, *args, object_list=None, **kwargs):
+        ctx = super().get_context_data(
+            *args, object_list=object_list, **kwargs
+        )
+        alumnus = self.get_queryset()
+        f = AlumniFilter(self.request.GET, queryset=alumnus, request=self.request)
+        ctx["filter"] = f
+        return ctx
+
+
+@user_passes_test(user_is_student)
+def student_my_portal(request, student_id: str):
+    if request.user.employee_or_student_id != student_id:
+        return HttpResponseNotFound("Page not found!")
+
+    student = get_object_or_404(Student, user=request.user, temporary_id=student_id, admission_student__department_choice__institute=request_institute(request))
+
+    department = student.admission_student.choosen_department
+    subject_group = SubjectGroup.objects.filter(
+        department=department, semester=student.semester
+    ).first()
+    subjects = subject_group.subjects.all() if subject_group else []
+    classmates = (
+        Student.objects.filter(
+            batch=student.batch,
+            semester=student.semester,
+            admission_student__choosen_department=department,
+        )
+        .exclude(pk=student.pk)
+        .select_related("admission_student")[:50]
+    )
+    ctx = {
+        "student": student,
+        "subjects": subjects,
+        "classmates": classmates,
+    }
+    return render(request, "students/my-portal.html", ctx)

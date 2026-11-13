@@ -1,0 +1,16 @@
+{% load static %}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Platform sign in | edunaij</title><link rel="stylesheet" href="{% static 'css/nice-college.css' %}"><link rel="stylesheet" href="{% static 'css/edunaij-platform.css' %}"></head>
+<body class="ej-login-page"><header class="ej-login-header"><a class="ej-wordmark" href="{% url 'platform:overview' %}">{% include 'platform/brand.html' %}</a><span>Platform administration</span></header>
+<main class="ej-login-main"><h1>Sign in to edunaij</h1><p class="ej-login-description">Access school organisations, subscription plans and platform releases.</p>
+{% for message in messages %}<div class="nc-alert" role="status">{{ message }}</div>{% endfor %}
+<form class="ej-login-form" method="post" action="{% url 'platform:login' %}">{% csrf_token %}
+{% if form.non_field_errors %}<div class="ej-login-error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+{% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+{% for field in form.visible_fields %}{% if field.name != 'remember' %}<div class="ej-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}</div>{% endif %}{% endfor %}
+<div class="ej-login-options">{% if form.remember %}<label for="{{ form.remember.id_for_label }}">{{ form.remember }} Remember me</label>{% endif %}<a href="{% url 'account_reset_password' %}">Forgot password?</a></div>
+{% if redirect_field_value %}<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">{% endif %}
+<button class="nc-button" type="submit">Sign in</button></form>
+<div class="ej-login-footer"><p><a href="{% url 'platform:register_school' %}">Register a school</a></p><p>School staff and parents should use their school's sign-in page.</p></div>
+<details class="ej-login-setup"><summary>Initial platform account setup</summary><p>Run this command from the project folder and enter your credentials locally.</p><code>.\venv\Scripts\python.exe manage.py createsuperuser</code><p>Then sign in here using the email address you registered.</p></details>
+</main></body></html>

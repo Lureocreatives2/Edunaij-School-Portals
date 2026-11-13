@@ -1,0 +1,26 @@
+from django import forms
+
+from django_school_management.institute.models import InstituteProfile
+
+
+class InstituteProfileCreateForm(forms.ModelForm):
+    class Meta:
+        model = InstituteProfile
+        fields = '__all__'
+        exclude = ['active', 'created_by', 'tenant', 'current_session', 'onboarding_completed']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True, *args, **kwargs):
+        if self.request is not None and self.request.user.is_authenticated:
+            self.instance.created_by = self.request.user
+            self.instance.active = True
+        institute = super().save(commit=commit)
+        if commit and self.request and self.request.user.is_authenticated:
+            user = self.request.user
+            user.institute = institute
+            user.save(update_fields=['institute'])
+        return institute
+

@@ -1,0 +1,39 @@
+{% extends 'dashboard.html' %}
+{% block page_name %}School registrations{% endblock %}
+{% block dashboard-body %}
+  <div class="nc-page-heading"><h1>School registrations</h1></div>
+  <section class="nc-panel table-responsive">
+    <table class="nc-table">
+      <thead><tr><th>School</th><th>Type and location</th><th>Contact</th><th>Registration and approval</th><th>Received</th></tr></thead>
+      <tbody>
+        {% for registration in registrations %}
+          <tr>
+            <td>{{ registration.school_name }}</td>
+            <td>{{ registration.get_school_type_display }}<br>{{ registration.get_ownership_display }}<br>{{ registration.lga }}{% if registration.lga and registration.state %}, {% endif %}{{ registration.state }}<br>{{ registration.campus_address }}</td>
+            <td>{{ registration.contact_name }}{% if registration.contact_role %} · {{ registration.contact_role }}{% endif %}<br>{{ registration.contact_phone }}<br><a href="mailto:{{ registration.contact_email }}">{{ registration.contact_email }}</a></td>
+            <td>
+              <details>
+                <summary>View details</summary>
+                <div>CAC status · {{ registration.get_cac_status_display|default:'Not provided' }}</div>
+                {% if registration.cac_number %}<div>{{ registration.cac_legal_name }} · {{ registration.cac_number }}</div>{% endif %}
+                <div>Education approval · {{ registration.get_approval_status_display|default:'Not provided' }}</div>
+                {% if registration.approval_reference %}<div>{{ registration.approval_authority }} · {{ registration.approval_reference }}</div>{% endif %}
+                {% if registration.school_code %}<div>School code · {{ registration.school_code }}</div>{% endif %}
+              </details>
+            </td>
+            <td>{{ registration.submitted_at|date:'j M Y, H:i' }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">No school registration requests yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if registrations.has_other_pages %}
+      <nav class="nc-panel-body" aria-label="Registration pages">
+        {% if registrations.has_previous %}<a href="?page={{ registrations.previous_page_number }}">Previous</a>{% endif %}
+        <span>Page {{ registrations.number }} of {{ registrations.paginator.num_pages }}</span>
+        {% if registrations.has_next %}<a href="?page={{ registrations.next_page_number }}">Next</a>{% endif %}
+      </nav>
+    {% endif %}
+  </section>
+{% endblock %}

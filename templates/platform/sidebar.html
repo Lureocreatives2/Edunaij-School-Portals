@@ -1,0 +1,9 @@
+<aside class="nc-sidebar" id="school-navigation" aria-label="Platform navigation">
+<a class="ej-brand" href="{% url 'platform:overview' %}"><span class="ej-wordmark">{% include 'platform/brand.html' %}</span><small>Platform administration</small></a>
+<div class="nc-nav-label">Manage</div><nav class="nc-nav">
+<a href="{% url 'platform:school_registrations' %}">{% include 'ui/icon.html' with name='users' %} School registrations</a>
+<a href="{% url 'platform:overview' %}">{% include 'ui/icon.html' with name='grid' %} Schools & subscriptions</a>
+<a href="{% url 'platform:plans' %}">{% include 'ui/icon.html' with name='wallet' %} Subscription plans</a>
+<a href="{% url 'platform:releases' %}">{% include 'ui/icon.html' with name='book' %} Releases</a>
+</nav><div class="nc-nav-label">Administration</div><nav class="nc-nav"><a href="{% url 'admin:index' %}">{% include 'ui/icon.html' with name='settings' %} System administration</a></nav>
+<div class="nc-sidebar-bottom"><div class="ej-sidebar-footer">Platform owner access</div><nav class="nc-nav"><a href="{% url 'index_view' %}">School workspace</a><a href="{% url 'account_logout' %}">Sign out</a></nav></div></aside>

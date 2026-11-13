@@ -1,0 +1,1 @@
+{% extends 'portals/base.html' %}{% block portal_content %}<h1>Create assignment</h1><p>Choose a class and a future deadline. Dates use the school time zone.</p><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button type="submit" class="btn btn-primary">Publish assignment</button></form>{% endblock %}

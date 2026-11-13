@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4"><i class="fas fa-credit-card"></i> Billing & Subscription</h2>
+    
+    <!-- Current Plan & Status -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Current Subscription</h5>
+        </div>
+        <div class="card-body">
+            {% if subscription %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Status:</strong> 
+                        <span class="badge badge-{% if subscription.status == 'active' %}success{% elif subscription.status == 'past_due' %}danger{% else %}secondary{% endif %}">
+                            {{ subscription.status|title }}
+                        </span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Next Renewal:</strong> {{ subscription.current_period_end|date:"M d, Y" }}
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Auto-Renew:</strong> 
+                        {% if subscription.auto_renew %}<span class="text-success">Yes</span>{% else %}<span class="text-danger">No</span>{% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">No active subscription found. Please contact platform support.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Usage Statistics -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Current Usage</h5>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h3>{{ usage_counts.students }}</h3>
+                    <p class="text-muted">Active Students</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>{{ usage_counts.teachers }}</h3>
+                    <p class="text-muted">Active Teachers</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>{{ usage_counts.classes }}</h3>
+                    <p class="text-muted">Active Classes</p>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> Approaching your plan limits? <a href="#" class="alert-link">Upgrade your plan</a> to add more users.
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice History -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Recent Invoices</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Invoice ID</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td><small>{{ invoice.stripe_invoice_id }}</small></td>
+                        <td>{{ invoice.created_at|date:"M d, Y" }}</td>
+                        <td>{{ invoice.currency }} {{ invoice.amount }}</td>
+                        <td>
+                            <span class="badge badge-{% if invoice.status == 'paid' %}success{% else %}warning{% endif %}">
+                                {{ invoice.status|title }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if invoice.status == 'paid' %}
+                                <a href="#" class="btn btn-sm btn-outline-primary"><i class="fas fa-download"></i> PDF</a>
+                            {% else %}
+                                <a href="#" class="btn btn-sm btn-outline-danger">Pay Now</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-3">No invoices found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

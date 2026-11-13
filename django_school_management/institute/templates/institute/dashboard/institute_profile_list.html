@@ -1,0 +1,79 @@
+{% extends 'dashboard.html' %}
+
+{% block extra_header %}
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css"
+  rel="stylesheet">
+{% endblock %}
+
+{% block dashboard-body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'index_view' %}">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Institute Profiles</li>
+  </ol>
+</nav>
+
+<h4>Institute Profiles</h4>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table border">
+        <thead>
+          <tr>
+            <th scope="col">SL</th>
+            <th scope="col">Name</th>
+            <th scope="col">Active</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for profile in institute_profiles %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+              <a href="{{ profile.get_absolute_url }}">{{ profile.name }}</a></td>
+            <td>
+              {% if profile.active %}
+                <span class="badge badge-success">Active</span>
+              {% else %}
+                <span class="badge badge-warning">Inactive</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="text-center text-muted py-4">No institute profiles found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+<script>
+  const permsTd = $('.table-td-show-more');
+
+  const toggleHeight = (element) => {
+    const currentHeight = element.style.height;
+    if (currentHeight == '100%') {
+      element.style.height = '100px';
+    } else {
+      element.style.height = '100%';
+    }
+  }
+
+  permsTd.map(function (cell) {
+    const cellElem = permsTd[cell];
+    cellElem.addEventListener('click', function (e) {
+      element = this.parentElement
+      toggleHeight(element);
+    })
+  })
+
+</script>
+{% endblock %}

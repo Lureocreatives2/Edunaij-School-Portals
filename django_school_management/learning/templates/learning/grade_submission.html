@@ -1,0 +1,1 @@
+{% extends 'portals/base.html' %}{% block portal_content %}<h1>Grade submitted work</h1><form method="post" action="{% url 'learning:grade_submission' submission.pk %}">{% csrf_token %}{{ form.as_p }}<button type="submit" class="btn btn-primary">Save grade</button></form>{% endblock %}

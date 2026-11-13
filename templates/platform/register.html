@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if received %}Request received{% else %}Register your school{% endif %} | edunaij</title>
+  <link rel="stylesheet" href="{% static 'css/nice-college.css' %}">
+  <link rel="stylesheet" href="{% static 'css/edunaij-platform.css' %}">
+</head>
+<body class="ej-login-page ej-registration">
+  <header class="ej-login-header">
+    <a class="ej-wordmark" href="{% url 'platform:register_school' %}">{% include 'platform/brand.html' %}</a>
+    <a href="{% url 'platform:login' %}">Platform sign-in</a>
+  </header>
+  <main class="ej-registration-main">
+    {% if received %}
+      <section class="ej-login-form ej-registration-confirmation">
+        <h1>Registration request received</h1>
+        <p>The edunaij team will review your request and use the contact email you provided to coordinate school setup.</p>
+        <a href="{% url 'platform:register_school' %}">Back to registration</a>
+      </section>
+    {% else %}
+      <div class="ej-registration-intro">
+        <h1>Register your school</h1>
+        <p>Tell us about your school and who we should contact to set up its workspace.</p>
+      </div>
+      <form class="ej-login-form ej-registration-form" method="post">
+        {% csrf_token %}
+        {% if form.errors %}<p class="ej-login-error" role="alert">Check the fields below and submit again.</p>{% endif %}
+        {{ form.non_field_errors }}
+        {% for label, fields in form.grouped_fields %}
+          <fieldset class="ej-registration-section">
+            <legend>{{ label }}</legend>
+            <div class="ej-registration-fields">
+              {% for field in fields %}
+                <div class="ej-field">
+                  {{ field.label_tag }}{{ field }}
+                  {% if field.help_text %}<small class="ej-field-help" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</small>{% endif %}
+                  {{ field.errors }}
+                </div>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% endfor %}
+        <button class="nc-button" type="submit">Submit registration request</button>
+      </form>
+      <aside class="ej-registration-next">
+        <h2>After you submit</h2>
+        <p>We review the school details and confirm your point of contact. Keep your CAC certificate and education approval letter available if they apply to your school. Requirements vary by state and institution type.</p>
+      </aside>
+    {% endif %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends 'portals/base.html' %}
+{% block portal_content %}<h1>My assignments</h1><p>{{ student.academic_class|default:'Ask the school to assign your class.' }}</p>
+{% for assignment in assignments %}<article class="record"><h2>{{ assignment.title }}</h2><p>Due {{ assignment.due_date|date:'M j, Y H:i' }} · {{ assignment.teacher.name|default:'School staff' }}</p><p>{{ assignment.description|linebreaksbr }}</p>
+{% if assignment.attachment %}<p><a href="{{ assignment.attachment.url }}">Download assignment</a></p>{% endif %}
+{% if assignment.submission %}<p><strong>Submitted</strong> · {{ assignment.submission.get_grade_display }}</p><p>{{ assignment.submission.feedback|default:'No feedback yet.'|linebreaksbr }}</p>{% if assignment.submission.file %}<a href="{{ assignment.submission.file.url }}">Download my submitted file</a>{% endif %}
+{% elif assignment.is_overdue %}<p>The submission deadline has passed.</p>
+{% else %}<form method="post" action="{% url 'learning:submit_assignment' assignment.pk %}" enctype="multipart/form-data">{% csrf_token %}
+<p><label for="answer-{{ assignment.pk }}">Your answer</label><textarea id="answer-{{ assignment.pk }}" name="text_response" rows="4" maxlength="20000"></textarea></p>
+<p><label for="file-{{ assignment.pk }}">Attach work (optional, up to 10 MB)</label><input id="file-{{ assignment.pk }}" name="file" type="file" accept=".pdf,.docx,.odt,.txt,.png,.jpg,.jpeg,.webp"></p><button type="submit" class="btn btn-primary">Submit work</button></form>{% endif %}</article>
+{% empty %}<p>No assignments are available for your class.</p>{% endfor %}{% endblock %}

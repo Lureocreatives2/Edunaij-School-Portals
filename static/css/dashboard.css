@@ -1,0 +1,222 @@
+/* VARIABLES */
+:root {
+	--primary-color: #6366f1;
+	--green-color: #10b981;
+	--cyan-color: #06b6d4;
+	--yellow-color: #f59e0b;
+}
+
+/* FONTS */
+@font-face {
+	font-family: 'fontello';
+	src: url('./font/fontello.eot?6968418');
+	src: url('./font/fontello.eot?6968418#iefix') format('embedded-opentype'),
+		url('./font/fontello.woff?6968418') format('woff'),
+		url('./font/fontello.ttf?6968418') format('truetype'),
+		url('./font/fontello.svg?6968418#fontello') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* GENERIC CLASSES*/
+.lio-primary-bg {
+	background: var(--primary-color);
+	color: #fff;
+}
+
+.selected-item {
+	border: 3px solid var(--green-color);
+	border-radius: 12px;
+}
+
+.selected-item::after {
+	content: '\f14a';
+	font-family: "fontello";
+	display: block;
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	background: var(--green-color);
+	right: 0;
+	bottom: 0;
+	color: #fff;
+	font-size: 24px;
+	text-align: center;
+	border-radius: 12px 0 0 0;
+}
+
+.hide {
+	display: none;
+}
+
+.dashboard-section-title {position: relative;}
+.dashboard-section-title .title-v-line {
+	content: "";
+	width: 4px;
+	height: 100%;
+	background: var(--primary-color);
+	position: absolute;
+	border-radius: 2px;
+}
+.dashboard-section-title h4 {
+	margin-left: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+	font-size: 1rem;
+	letter-spacing: 0.02em;
+}
+.dashboard-section-title .color-2 {
+	border-bottom: 2px solid var(--cyan-color);
+	font-style: italic;
+}
+
+
+.card {
+	box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+}
+
+.card h5 {
+	font-weight: bold;
+	font-size: 1rem;
+}
+
+.card-header {
+	color: var(--primary-color);
+	text-transform: capitalize;
+}
+
+.unpaid, .paid {
+	min-width: 49%;
+}
+
+.title.list-group-item {
+	background: #f8fafc;
+}
+
+.unpaid h5, .paid h5 {
+	color: var(--primary-color);
+	text-transform: capitalize;
+}
+
+/* SIDEBAR */
+.logo {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* NAVBAR */
+.nav-item .title {
+	text-transform: capitalize !important;
+}
+
+/* ==================================== */
+/* --------- ADMISSION PAGE ----------- */
+/* ==================================== */
+
+.admission-form .nav-link.active {
+	background: var(--primary-color);
+	color: #fff;
+	border: none;
+}
+
+
+/* ==================================== */
+/* --------- DEPARTMENT PAGE ---------- */
+/* ==================================== */
+.list-group-item {
+	text-transform: capitalize;
+}
+
+
+/* ==================================== */
+/* ---------- ALL STUDENTS ------------ */
+/* ==================================== */
+
+
+
+/* ====================================------------ */
+/* ---------- STUDENTS INDEX / COUNSEL ------------ */
+/* -------------------------------------------------*/
+.card-top-meta-info {
+	max-height: 35px;
+}
+.card-record-date {
+	max-height: 35px;
+}
+.card-actions-action {
+	cursor: pointer;
+}
+.card-print-pdf-actions .card-actions-action {
+	margin: 5px;
+}
+#monthly-report-table {
+	transition: all 2s linear;
+}
+#monthly-report-table .table.table-striped {
+	margin-bottom: 0;
+}
+#monthly_report_date {
+	max-height: 34px;
+	border: 0;
+	outline: none;
+	border-radius: 0;
+}
+
+
+/* ==================================== */
+/* --------- ADMINISTRATIVE ----------- */
+/* ------------------------------------ */
+
+.group-table-perms {
+	height: 100px;
+	overflow: hidden;
+	position: relative;
+}
+.table-td-show-more {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	cursor: pointer;
+}
+
+
+/* ============================================== */
+/* --------- result/result_entry.html ----------- */
+/* ---------------------------------------------- */
+#student-preview-card-placeholder {
+    padding: 1rem;
+	border: 3px dotted #94a3b8;
+	color: #64748b;
+	border-radius: 12px;
+}
+
+
+#subjectCounter {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	width: 50px;
+	height: 50px;
+	background: var(--primary-color);
+	border: 2px solid #fff;
+	border-radius: 12px;
+	color: #fff;
+	font-weight: bolder;
+	font-size: 20px;
+	cursor: pointer;
+	box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#subjectCounter:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+#subjectCounter #subjectCounterN {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

@@ -1,0 +1,108 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="edunaij brings admissions, classes and school administration together for Nigerian schools.">
+  <title>edunaij | School management for Nigeria</title>
+  <link rel="stylesheet" href="{% static 'css/edunaij-platform.css' %}">
+  <link rel="stylesheet" href="{% static 'edunaij/landing.css' %}">
+  <script src="{% static 'edunaij/landing.js' %}" defer></script>
+</head>
+<body class="edu-landing">
+  <a class="edu-skip" href="#main">Skip to content</a>
+  <header class="edu-header">
+    <div class="edu-scroll-progress" aria-hidden="true"></div>
+    <div class="edu-shell edu-nav">
+      <a class="ej-wordmark" href="{% url 'pages:landing' %}">{% include 'platform/brand.html' %}</a>
+      <nav aria-label="Main navigation">
+        <a href="#product">Product</a><a href="#getting-started">Getting started</a><a href="#contact">Contact</a>
+      </nav>
+      <a class="edu-button edu-outline" href="{% url 'platform:register_school' %}">Register your school <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main id="main">
+    <section class="edu-hero" aria-labelledby="hero-title">
+      <div class="edu-motion" aria-hidden="true"></div>
+      <div class="edu-hero-pattern" aria-hidden="true"></div>
+      <div class="edu-shell edu-hero-grid">
+        <div class="edu-hero-copy">
+          <p class="edu-kicker"><span></span> Built for Nigerian schools</p>
+          <h1 id="hero-title">Run your school.<br><em>Make room for learning.</em></h1>
+          <p class="edu-lead">Bring admissions, classes, staff and student records together in one workspace for your school.</p>
+          <div class="edu-actions">
+            <a class="edu-button" href="{% url 'platform:register_school' %}">Register your school <span aria-hidden="true">↗</span></a>
+            <a class="edu-text-link" href="#product">See how it works <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+        <figure class="edu-hero-photo">
+          <img src="{% static 'edunaij/classroom.webp' %}" alt="Students working together in a Nigerian school classroom" width="1440" height="960" fetchpriority="high">
+        </figure>
+      </div>
+    </section>
+    <section class="edu-shell edu-product" id="product" aria-labelledby="product-title">
+      <div class="edu-section-head" data-reveal>
+        <p class="edu-kicker">The school workspace</p>
+        <h2 id="product-title">See your school at a glance.</h2>
+        <p>Check enrolment, see which classes are offered and pick up where you left off in setup.</p>
+      </div>
+      <div class="edu-tour" data-reveal>
+        <div class="edu-tour-guide" hidden>
+          <div class="edu-tour-controls" role="group" aria-label="Explore the dashboard">
+            <button type="button" data-tour="overview" aria-pressed="true">Overview</button>
+            <button type="button" data-tour="setup" aria-pressed="false">School setup</button>
+            <button type="button" data-tour="navigation" aria-pressed="false">Navigation</button>
+          </div>
+          <p class="edu-tour-note" aria-live="polite">See enrolment, staffing, classes and parent accounts at a glance.</p>
+        </div>
+        <figure class="edu-preview">
+          <div class="edu-preview-bar">
+            <span class="edu-preview-label">{% include 'platform/brand.html' %}<span>School workspace</span></span>
+            <a href="{% static 'edunaij/workspace-preview.webp' %}">Full screenshot <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="edu-preview-image">
+            <img src="{% static 'edunaij/workspace-preview.webp' %}" alt="Example edunaij dashboard showing school totals, recent students and the school setup checklist" width="1280" height="800" loading="lazy">
+            <span class="edu-focus" aria-hidden="true" hidden></span>
+          </div>
+          <figcaption>Example school dashboard with demonstration data</figcaption>
+        </figure>
+      </div>
+      <div class="edu-features">
+        <article data-reveal><span class="edu-feature-icon">{% include 'ui/icon.html' with name='users' %}</span><h3>Admissions and records</h3><p>Keep applications and enrolment records together so staff can find the information they need.</p></article>
+        <article data-reveal><span class="edu-feature-icon">{% include 'ui/icon.html' with name='book' %}</span><h3>Classes and results</h3><p>Set up the classes your school offers, manage assignments and prepare results.</p></article>
+        <article data-reveal><span class="edu-feature-icon">{% include 'ui/icon.html' with name='shield' %}</span><h3>School access</h3><p>Keep each school’s records in its own workspace and require multi-factor authentication for administrators.</p></article>
+      </div>
+    </section>
+    <section class="edu-setup" id="getting-started" aria-labelledby="setup-title">
+      <div class="edu-shell edu-setup-grid">
+        <figure class="edu-campus-photo" data-reveal><img src="{% static 'edunaij/campus.webp' %}" alt="A Nigerian school campus with students walking between classroom blocks" width="1320" height="880" loading="lazy"></figure>
+        <div>
+          <p class="edu-kicker" data-reveal>Getting started</p>
+          <h2 id="setup-title">From registration to your first class.</h2>
+          <ol class="edu-steps">
+            <li data-reveal><div><h3>Submit your school details</h3><p>Add your location, authorised contact and applicable CAC or education approval details.</p></div></li>
+            <li data-reveal><div><h3>Work with us to set up your workspace</h3><p>We review your request and contact your school to coordinate access.</p></div></li>
+            <li data-reveal><div><h3>Set up classes and add staff</h3><p>Use the setup checklist to add classes, staff and your first student records.</p></div></li>
+          </ol>
+          <a class="edu-button" href="{% url 'platform:register_school' %}">Start registration <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+    <section class="edu-contact" id="contact" aria-labelledby="contact-title">
+      <div class="edu-shell edu-contact-grid" data-reveal>
+        <div><p class="edu-kicker">Contact and partnerships</p><h2 id="contact-title">Let’s work together.</h2><p>Contact Adeshina Opeyemi about school onboarding, a product walkthrough or a partnership with your organisation.</p></div>
+        <div class="edu-contact-links">
+          <a class="edu-button edu-light" href="mailto:opeyemiolamide882@gmail.com">Email Adeshina Opeyemi <span aria-hidden="true">↗</span></a>
+          <span>opeyemiolamide882@gmail.com</span>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="edu-footer"><div class="edu-shell">
+    <a class="ej-wordmark" href="{% url 'pages:landing' %}">{% include 'platform/brand.html' %}</a>
+    <p>Developed by <a href="https://github.com/Lureocreatives2">Adeshina Opeyemi</a></p>
+    <a href="{% url 'platform:login' %}">Platform sign-in</a>
+  </div></footer>
+</body>
+</html>

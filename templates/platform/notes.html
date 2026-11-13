@@ -1,0 +1,1 @@
+{% extends 'dashboard.html' %}{% block page_name %}Release notes{% endblock %}{% block dashboard-body %}<div class="nc-eyebrow">Platform update</div><h1>Version {{ release.version }}</h1><section class="nc-panel"><div class="nc-panel-body">{{ release.notes|linebreaksbr }}</div></section>{% endblock %}

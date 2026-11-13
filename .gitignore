@@ -1,0 +1,73 @@
+ï»¿# Environment variables (NEVER commit this!)
+.env
+.env.local
+.env.*.local
+
+# Database
+*.sqlite3
+*.sqlite3-journal
+db.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Static & Media (Optional: commit if you want, but usually ignored in prod)
+staticfiles/
+media/
+
+# Logs
+*.log
+error.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups (Do not commit backups to GitHub!)
+backups/
+
+# Local exports and credentials
+.env.*
+!.env.example
+*.rdb
+/dump.json
+/datadump*.json
+*.pem
+*.key
+.pytest_cache/
+.coverage*
+htmlcov/
+/docs/*check*.json
+/docs/nice-college*.json
+/docs/ui-preview/

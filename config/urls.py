@@ -1,0 +1,94 @@
+from django.contrib import admin
+from django_school_management.billing import views as billing_views
+from django.urls import path, include, include
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+
+from django_school_management.institute.models import InstituteProfile
+from django_school_management.accounts.views import dashboard
+from django_school_management.utils.views import health_view
+from django_school_management.utils.private_media import school_media
+from django_school_management.learning.views import portal_home
+
+admin.site.site_header = 'Django Administration'
+admin.site.site_title = 'Django Site Admin'
+admin.site.index_title = 'Django Administration'
+
+DJANGO_ADMIN_URL = settings.DJANGO_ADMIN_URL + '/'
+urlpatterns = [
+    path('platform/', include('django_school_management.platform_control.urls')),
+    path("portal/", portal_home, name="portal_home"),
+    path("media/<path:name>", school_media, name="school_media"),
+    # Health check for load balancers / k8s
+    path('health/', health_view),
+    path('webhooks/stripe/', billing_views.stripe_webhook, name='stripe-webhook'),
+    path('billing/', billing_views.billing_dashboard, name='billing_dashboard'),
+    path('parents/', include('django_school_management.parents.urls', namespace='parents')),
+    path('learning/', include('django_school_management.learning.urls', namespace='learning')),
+    # Prometheus metrics (no auth; protect in production via network/firewall)
+    path('', include('django_prometheus.urls')),
+    # admin_honeypot doesn't support Django 4
+    # path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path(DJANGO_ADMIN_URL, admin.site.urls),
+    path('', include('django_school_management.pages.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include('django_school_management.api.urls')),
+    path('dashboard/', dashboard, name='index_view'),
+    path('accounts/', include('allauth.urls')),
+    path('blog/', include('django_school_management.articles.urls')),
+
+    path('account/', include('django_school_management.accounts.urls')),
+    path('academics/', include('django_school_management.academics.urls')),
+    path('notices/', include('django_school_management.notices.site_urls')),
+    path('notices/dashboard/', include('django_school_management.notices.dashboard_urls')),
+    path('students/', include('django_school_management.students.urls')),
+    path('tinymce/', include('tinymce.urls')),
+    path('teachers/', include('django_school_management.teachers.urls')),
+    path('result/', include('django_school_management.result.urls')),
+    path('institute/', include('django_school_management.institute.urls')),
+    path(
+        'password-reset/',
+        auth_views.PasswordResetView.as_view(
+            template_name='account/password/password_reset.html'
+        ),
+        name="password_reset",
+    ),
+    path(
+        'password_reset/done/',
+        auth_views.PasswordResetDoneView.as_view(
+            template_name='account/password/password_reset_done.html'
+        ),
+        name="password_reset_done",
+    ),
+    path(
+        'password-reset-confirm/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name='account/password/password_reset_confirm.html'
+        ),
+        name='password_reset_confirm',
+    ),
+    path(
+        'password-reset-complete/',
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name='account/password/password-reset-complete.html'
+        ),
+        name='password_reset_complete'
+    ),
+    path('dashboard/payments/', include('django_school_management.payments.urls')),
+    # API URLS
+    path('api/', include('django_school_management.articles.api.routes')),
+    path('upload/', include('django_file_form.urls')),
+]
+
+urlpatterns += static(
+    settings.STATIC_URL,
+    document_root=settings.STATIC_ROOT
+)
+
+if "debug_toolbar" in settings.INSTALLED_APPS:
+    import debug_toolbar
+
+    urlpatterns = [
+        path("__debug__/", include(debug_toolbar.urls))
+    ] + urlpatterns

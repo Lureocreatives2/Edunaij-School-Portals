@@ -1,0 +1,43 @@
+{% extends 'dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block dashboard-body %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index_view' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Import Subjects</li>
+    </ol>
+</nav>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+{% else %}
+<h4 class="mb-3">Import Subjects From CSV File</h4>
+<div class="alert alert-info">File order: {{ order }}</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="csv">Upload your CSV file</label>
+                        <input type="file" class="form-control-file" id="csv" name="file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

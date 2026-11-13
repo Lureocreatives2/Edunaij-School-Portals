@@ -1,0 +1,60 @@
+from django.db import models
+from django.conf import settings
+from model_utils.models import TimeStampedModel
+from django_prometheus.models import ExportModelOperationsMixin
+from taggit.managers import TaggableManager
+
+
+class Designation(ExportModelOperationsMixin('designation'), TimeStampedModel):
+    title = models.CharField(max_length=255)
+    created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.title)
+
+
+class Teacher(ExportModelOperationsMixin('teacher'), TimeStampedModel):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='teacher_record')
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        super().clean()
+        if self.user_id:
+            if (not self.institute_id or not self.institute.tenant_id or
+                    self.user.tenant_id != self.institute.tenant_id or self.user.institute_id != self.institute_id):
+                raise ValidationError({'user': 'The account must belong to this teacher school and institute.'})
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
+
+    employee_id = models.CharField(max_length=50)
+    name = models.CharField(max_length=150)
+    photo = models.ImageField(upload_to='teachers',
+                                default='teacheravatar.jpg')
+    date_of_birth = models.DateField(blank=True, null=True)
+    designation = models.ForeignKey(
+        Designation,
+        on_delete=models.CASCADE,
+        related_name='resources'
+    )
+    expertise = TaggableManager(blank=True)
+    mobile = models.CharField(max_length=11, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    joining_date = models.DateField(auto_now=True)
+    institute = models.ForeignKey(
+        'institute.InstituteProfile',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+        related_name='teachers',
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        ordering = ['joining_date', 'name']
+
+    def __str__(self):
+        return '{} ({})'.format(self.name, self.designation)

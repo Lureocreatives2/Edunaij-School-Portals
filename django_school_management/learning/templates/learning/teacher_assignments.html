@@ -1,0 +1,6 @@
+{% extends 'portals/base.html' %}
+{% block portal_content %}<h1>My teaching assignments</h1><p><a class="btn btn-primary" href="{% url 'learning:create_assignment' %}">Create assignment</a></p>
+{% for assignment in assignments %}<article class="record"><h2>{{ assignment.title }}</h2><p>{{ assignment.academic_class }} · Due {{ assignment.due_date|date:'M j, Y H:i' }}</p><p>{{ assignment.description|linebreaksbr }}</p>
+{% if assignment.attachment %}<a href="{{ assignment.attachment.url }}">Download assignment</a>{% endif %}
+<h3>Submissions</h3>{% for submission in assignment.school_submissions %}<section class="record"><h4>{{ submission.student.admission_student.name }}</h4><p>{{ submission.text_response|linebreaksbr }}</p>{% if submission.file %}<p><a href="{{ submission.file.url }}">Download work</a></p>{% endif %}
+<form method="post" action="{% url 'learning:grade_submission' submission.pk %}">{% csrf_token %}{{ submission.grade_form.as_p }}<button type="submit" class="btn btn-primary">Save grade</button></form></section>{% empty %}<p>No submissions yet.</p>{% endfor %}</article>{% empty %}<p>You have not published an assignment yet.</p>{% endfor %}{% endblock %}

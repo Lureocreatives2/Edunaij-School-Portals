@@ -1,0 +1,47 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block dashboard-body %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index_view' %}">Dashboard</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'teachers:designations' %}">Designations</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-12 mb-2">
+        <a href="{% url 'teachers:create_designation' %}" class="btn btn-primary">
+            <i class="fas fa-plus mr-1"></i> Add New Designation
+        </a>
+    </div>
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Designation</th>
+                        <th scope="col">Resources</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for object in object_list %}
+                    <tr>
+                        <td>{{ object.title }}</td>
+                        <td>{{ object.resources.all.count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2" class="text-center text-muted py-4">No designations found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

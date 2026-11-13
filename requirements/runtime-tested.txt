@@ -112,7 +112,7 @@ requests-oauthlib==2.0.0
 requests==2.34.2
 sentry-sdk==2.68.1
 six==1.17.0
-social-auth-app-django==6.0.1
+social-auth-app-django==8.0.0
 social-auth-core==5.1.0
 soupsieve==2.9.2
 sqlparse==0.6.0

@@ -82,7 +82,7 @@ The setup helper creates `envs/.env` with a unique secret and preserves existing
 
 The packaging script builds a ZIP, file manifest and SHA256 checksum under `dist/`. It excludes local environments, databases, uploads, backups and internal reports.
 
-[Architecture](docs/public/ARCHITECTURE.md) · [Deployment checklist](docs/public/DEPLOYMENT.md) · [GitHub publishing](docs/public/GITHUB.md) · [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md)
+[Architecture](docs/public/ARCHITECTURE.md) · [Deployment checklist](docs/public/DEPLOYMENT.md) · [GitHub publishing](docs/public/GITHUB.md) · [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md) · [Dependency review](docs/public/DEPENDENCIES.md)
 
 ## Deploy the website
 

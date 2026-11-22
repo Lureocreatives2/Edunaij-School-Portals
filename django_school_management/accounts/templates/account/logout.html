@@ -19,7 +19,7 @@
         >
           <span class="block text-indigo-600">Are you sure to log out?</span>
         </h2>
-        
+
         <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
           <form method="post" action="{% url 'account_logout' %}">
             {% csrf_token %}
@@ -32,8 +32,8 @@
               <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
             {% endif %}
           </form>
-          
-          <div class="ml-3 inline-flex rounded-md shadow">
+
+          <div class="ms-3 inline-flex rounded-md shadow">
             <a
               href="javascript:history.go(-1)"
               class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"

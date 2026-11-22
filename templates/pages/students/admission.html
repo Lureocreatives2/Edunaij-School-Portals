@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block extra_css %}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'vendor/select2/select2.min.css' %}">
     <style>
         .selection { width: 100% !important; }
         #id_current_address, #id_permanent_address { max-height: 75px; }
@@ -55,7 +55,7 @@
             {% if form.errors %}
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Please correct the errors below.</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endif %}
             <div class="row">
@@ -64,7 +64,7 @@
                         <form id="admission-form" action="" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form|crispy }}
-                            <div class="form-group mt-4">
+                            <div class="mb-3 mt-4">
                                 <button type="submit" class="btn btn-success btn-submit-admission">Submit Application</button>
                             </div>
                         </form>
@@ -89,7 +89,7 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
     <script>
         $('input[type="file"]').change(function(e){
             var fileName = e.target.files[0] ? e.target.files[0].name : '';

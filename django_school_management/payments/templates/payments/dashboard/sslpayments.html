@@ -1,6 +1,6 @@
 {% extends 'dashboard.html' %}
 {% load render_table from django_tables2 %}
-{% load bootstrap4 %}
+{% load django_bootstrap5 %}
 
 {% block dashboard-body %}
 <div class="container-fluid">
@@ -17,14 +17,14 @@
         </div>
         {% if filter %}
         <div class="col-12">
-            <form action="" method="get" class="form form-inline">
-                {% bootstrap_form filter.form layout='inline' %}
+            <form action="" method="get" class="form d-flex flex-wrap align-items-center gap-2">
+                {% bootstrap_form filter.form %}
                 {% bootstrap_button 'filter' %}
             </form>
         </div>
         {% endif %}
         <div class="col-12">
-            {% render_table table 'django_tables2/bootstrap.html' %}
+            {% render_table table 'django_tables2/bootstrap5.html' %}
         </div>
     </div>
 </div>

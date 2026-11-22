@@ -17,9 +17,9 @@
                 <div class="large-article-container rounded">
                   <div class="overlay"></div>
                   <div class="cover-image">
-                    <img 
-                    src="{% if latest_featured_article %}{{ latest_featured_article.featured_image.url }}{% else %}https://picsum.photos/800{% endif %}" 
-                    alt="{% if latest_featured_article %} {{ latest_featured_article }} {% endif %}" 
+                    <img
+                    src="{% if latest_featured_article %}{{ latest_featured_article.featured_image.url }}{% else %}https://picsum.photos/800{% endif %}"
+                    alt="{% if latest_featured_article %} {{ latest_featured_article }} {% endif %}"
                     class="overlay-img">
                   </div>
                   <div class="main-content">
@@ -45,17 +45,17 @@
           <!-- Last three artilces -->
           <div class="col-sm-12 col-md-4 d-flex featured-latest-list">
             <div class="section-title mb-3">
-              <h4><i class="fas fa-sun ml-3"></i> Recent Articles</h4>
+              <h4><i class="fas fa-sun ms-3"></i> Recent Articles</h4>
             </div>
             <div class="d-flex flex-column justify-content-between
                featured-latest-list--container">
               {% for article in last_three_articles %}
               <div class="featured-article d-flex">
                 <a href="{{ article.get_absolute_url }}">
-                  <img src="{{ article.featured_image.url }}" 
+                  <img src="{{ article.featured_image.url }}"
                   width="120" height="110" alt="" class="rounded">
                 </a>
-                <div class="article-content p-2 ml-2">
+                <div class="article-content p-2 ms-2">
                   <small class="category-name">
                     <a href="{{ article.categories.first.get_absolute_url }}">
                       {{ article.categories.first|default:"uncategorized" }}
@@ -70,7 +70,7 @@
               </div>
               {% empty %}
               <div class="no-article">
-                <h5 class="ml-3"><i class="fas fa-frown"></i> No Article Was Found</h5>
+                <h5 class="ms-3"><i class="fas fa-frown"></i> No Article Was Found</h5>
               </div>
               {% endfor %}
             </div>
@@ -86,11 +86,11 @@
         <div class="col-sm-12 col-md-3 mb-5">
           <a href="{{ article.get_absolute_url }}">
             <div class="article-card rounded">
-              <img src="{{article.featured_image.url}}" 
-                alt="{{ request_institute.name }}-{{ article.title }}" 
+              <img src="{{article.featured_image.url}}"
+                alt="{{ request_institute.name }}-{{ article.title }}"
                 class="shadow shadow-sm rounded article-preview-image">
               <div class="article-content p-2">
-                <div class="category-name badge badge-info">
+                <div class="category-name badge text-bg-info">
                   <a class="text-light" href="{{ article.categories.first.get_absolute_url }}">
                     {{ article.categories.first|default:"uncategorized" }}
                   </a>
@@ -102,8 +102,8 @@
                     </a>
                   </b>
                 </p>
-                <div class="metadata d-flex justify-content-between pr-4">
-                  <small class="fsm muted mr-3">{{ article.created }}</small>
+                <div class="metadata d-flex justify-content-between pe-4">
+                  <small class="fsm muted me-3">{{ article.created }}</small>
                   <!-- <small class="fsm muted">1500 VIEWS</small> -->
                 </div>
               </div>
@@ -112,7 +112,7 @@
         </div>
       {% empty %}
       <div class="no-article">
-        <h5 class="ml-3"><i class="fas fa-frown"></i> No Article Found from Any Category</h5>
+        <h5 class="ms-3"><i class="fas fa-frown"></i> No Article Found from Any Category</h5>
       </div>
       {% endfor %}
     </div>
@@ -141,8 +141,8 @@
                     </a>
                   </b>
                 </p>
-                <div class="metadata d-flex justify-content-between pr-4">
-                  <small class="fsm muted mr-3">
+                <div class="metadata d-flex justify-content-between pe-4">
+                  <small class="fsm muted me-3">
                     {{ article.created }}
                   </small>
                   <!-- <small class="fsm muted">1500 VIEWS</small> -->
@@ -153,7 +153,7 @@
         </div>
         {% empty %}
         <div class="no-article text-light">
-          <h5 class="ml-3"><i class="fas fa-frown"></i> No Article Was Found</h5>
+          <h5 class="ms-3"><i class="fas fa-frown"></i> No Article Was Found</h5>
         </div>
         {% endfor %}
       </div>
@@ -181,8 +181,8 @@
                     </a>
                   </b>
                 </p>
-                <div class="metadata d-flex justify-content-between pr-4">
-                  <small class="fsm muted mr-3">{{ article.created }}</small>
+                <div class="metadata d-flex justify-content-between pe-4">
+                  <small class="fsm muted me-3">{{ article.created }}</small>
                   <!-- <small class="fsm muted">1500 VIEWS</small> -->
                 </div>
               </div>

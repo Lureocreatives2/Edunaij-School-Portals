@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 
 {% block dashboard-body %}
@@ -60,11 +60,11 @@
             </td>
             <td class="text-center">
               {% if applicant.rejected %}
-                <span class="badge badge-danger">Rejected</span>
+                <span class="badge text-bg-danger">Rejected</span>
               {% elif applicant.admitted %}
-                <span class="badge badge-success">Admitted</span>
+                <span class="badge text-bg-success">Admitted</span>
               {% else %}
-                <span class="badge badge-warning">Pending</span>
+                <span class="badge text-bg-warning">Pending</span>
               {% endif %}
             </td>
             <td>{{ applicant.mobile_number }}</td>
@@ -102,11 +102,11 @@
 {% endblock %}
 
 {% block extrajs %}
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap5.min.js' %}"></script>
 <script>
 $(document).ready(function() {
-  $('#applicantsTable').dataTable({"order": [[2, "desc"]]});
+  $('#applicantsTable').DataTable({"order": [[2, "desc"]]});
 });
 </script>
 {% endblock extrajs %}

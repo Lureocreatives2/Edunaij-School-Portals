@@ -30,8 +30,8 @@
                             No academic session found. Please create one first.
                         </div>
                         {% else %}
-                        <div class="form-row align-items-center justify-content-end">
-                            <div class="form-group col-md-3">
+                        <div class="row g-3 align-items-center justify-content-end">
+                            <div class="mb-3 col-md-3">
                                 <label for="dept">{{ department_label }}</label>
                                 <select id="dept" class="form-control" data-url="{% url 'students:admission_confirmation' %}">
                                     <option value="">Choose...</option>
@@ -40,7 +40,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="mb-3 col-md-3">
                                 <label for="batch-select">Batch</label>
                                 <select id="batch-select" class="form-control" name="batch_id" {% if no_active_session %}disabled{% endif %}>
                                     <option value="">Choose...</option>
@@ -49,7 +49,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group align-self-end">
+                            <div class="mb-3 align-self-end">
                                 <button type="submit" class="btn btn-primary" id="btn-confirm-students">
                                     Create student profiles
                                 </button>
@@ -63,9 +63,7 @@
                     {% for message in messages %}
                     <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
                     <strong>{{ message }}</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     {% endfor %}
                 {% endif %}
@@ -76,9 +74,9 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">
-                                        <input class="btn btn-primary btn-sm mb-1 btn-block"
+                                        <input class="btn btn-primary btn-sm mb-1 w-100"
                                             id="toggle-check" type="button" value="check all"/>
-                                        <input class="btn btn-danger btn-sm btn-block"
+                                        <input class="btn btn-danger btn-sm w-100"
                                             id="toggle-uncheck" type="button" value="uncheck all"/>
                                     </th>
                                     <th scope="col">ID</th>

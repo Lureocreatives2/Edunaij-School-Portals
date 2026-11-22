@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 
 {% block dashboard-body %}
@@ -71,7 +71,7 @@
 {% endblock %}
 
 {% block extrajs %}
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
-<script>$(document).ready(function(){ $('#paidTable').dataTable(); });</script>
+<script src="{% static 'vendor/datatables/dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap5.min.js' %}"></script>
+<script>$(document).ready(function(){ $('#paidTable').DataTable(); });</script>
 {% endblock extrajs %}

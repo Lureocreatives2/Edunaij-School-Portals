@@ -11,8 +11,8 @@
     <title>DPI BLOG | Learn, Share and Practice Writing Skills</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'articles/css/tw_theme.css' %}" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
-        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/fontawesome/css/v4-shims.min.css' %}">
 </head>
 
 <body>
@@ -30,8 +30,8 @@
                 </div>
                 <div class="banner-cta">
                     <a href="{{ object.get_absolute_url }}" class="title"> {{ object.title }} </a>
-                    <a href="{{ object.get_absolute_url }}" 
-                        class="bg-yellow-500 hover:bg-yellow-600 text-white 
+                    <a href="{{ object.get_absolute_url }}"
+                        class="bg-yellow-500 hover:bg-yellow-600 text-white
                         font-bold py-2 px-4 rounded-full">
                         Learn More
                     </a>
@@ -53,17 +53,17 @@
                 <div class="leftbar row-span-3">
                     <!-- atuhor metadata -->
                     <div class="author-meta flex flex-col items-center">
-                        <img 
-                            class="rounded-full h-10 w-10 flex items-center justify-center" 
-                            
+                        <img
+                            class="rounded-full h-10 w-10 flex items-center justify-center"
+
                             {% if object.author.profile.profile_picture %}
-                                src="{{ object.author.profile.profile_picture.url }}" 
+                                src="{{ object.author.profile.profile_picture.url }}"
                             {% else %}
                                 src="#"
                             {% endif %}
                             alt="{{ object.author.profile.username|title }}"
                         />
-                        
+
                         <div class="flex flex-col text-center">
                             <span class="text-gray-600 font-bold">{{ object.author|title }}</span>
                             {% if object.author.profile.show_headline_in_bio %}
@@ -78,22 +78,22 @@
                     <!-- share widgets -->
                     <div class="sharer-widget mt-20">
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="./source/images/icons/facebook.png" alt="">
+                            <img class="w-10 mb-2 ms-5" src="./source/images/icons/facebook.png" alt="">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="./source/images/icons/linkedin.png" alt="">
+                            <img class="w-10 mb-2 ms-5" src="./source/images/icons/linkedin.png" alt="">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="./source/images/icons/twitter.png" alt="">
+                            <img class="w-10 mb-2 ms-5" src="./source/images/icons/twitter.png" alt="">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="./source/images/icons/whatsapp.png" alt="">
+                            <img class="w-10 mb-2 ms-5" src="./source/images/icons/whatsapp.png" alt="">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="./source/images/icons/reddit.png" alt="">
+                            <img class="w-10 mb-2 ms-5" src="./source/images/icons/reddit.png" alt="">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="./source/images/icons/pinterest.png" alt="">
+                            <img class="w-10 mb-2 ms-5" src="./source/images/icons/pinterest.png" alt="">
                         </a>
                     </div>
 
@@ -113,22 +113,22 @@
                     <!-- share widgets -->
                     <div class="sharer-widget flex justify-end mt-12">
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="{% static 'articles/images/social-icons/facebook.png' %}">
+                            <img class="w-10 mb-2 ms-5" src="{% static 'articles/images/social-icons/facebook.png' %}">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="{% static 'articles/images/social-icons/linkedin.png' %}">
+                            <img class="w-10 mb-2 ms-5" src="{% static 'articles/images/social-icons/linkedin.png' %}">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="{% static 'articles/images/social-icons/twitter.png' %}">
+                            <img class="w-10 mb-2 ms-5" src="{% static 'articles/images/social-icons/twitter.png' %}">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="{% static 'articles/images/social-icons/whatsapp.png' %}">
+                            <img class="w-10 mb-2 ms-5" src="{% static 'articles/images/social-icons/whatsapp.png' %}">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="{% static 'articles/images/social-icons/reddit.png' %}">
+                            <img class="w-10 mb-2 ms-5" src="{% static 'articles/images/social-icons/reddit.png' %}">
                         </a>
                         <a href="">
-                            <img class="w-10 mb-2 ml-5" src="{% static 'articles/images/social-icons/pinterest.png' %}">
+                            <img class="w-10 mb-2 ms-5" src="{% static 'articles/images/social-icons/pinterest.png' %}">
                         </a>
                     </div>
                     <!-- /sharer widget end -->
@@ -138,7 +138,7 @@
             <!-- Comments Section -->
             <div class="comments-section mb-12 w-9/12 sm:mx-auto">
                 <div class="section-title uppercase w-full">Comments</div>
-            
+
                 <div class="comments-container md:w-3/5 sm:w-full">
                     {% if request.user.is_authenticated %}
                         <h3>Post a Comment</h3>
@@ -157,28 +157,28 @@
                             to comment
                         </h3>
                     {% endif %}
-                    
+
                     {% if user_pending_comments %}
                         {% for comment in user_pending_comments %}
                             <!-- User's pending comments -->
                             <div class="req-user-comments mt-5">
                                 <div class="single-comment pending-comment flex mb-5">
-                                    <div class="mr-5">
-                                        <img 
+                                    <div class="me-5">
+                                        <img
                                         {% if comment.author.profile.profile_picture %}
                                             src="{{ comment.author.profile.profile_picture.url }}"
                                         {% else %}
                                             src="#"
                                         {% endif %}
                                             alt="{{ comment.author }}"
-                                            class="rounded-full h-14" 
+                                            class="rounded-full h-14"
                                         />
                                     </div>
                                     <div class="comment-contents w-full">
                                         <div class="comment-meta flex justify-between">
                                             <div>
                                                 <span>{{ comment.author|title }}</span>
-                                                <span class="labels ml-1 bg-red-600 text-gray-100 rounded-lg px-2">
+                                                <span class="labels ms-1 bg-red-600 text-gray-100 rounded-lg px-2">
                                                     Pending
                                                 </span>
                                             </div>
@@ -198,9 +198,9 @@
                     {% for comment in comments %}
                         <div class="public-comments mt-5">
                             <div class="single-comment flex mb-5">
-                                <div class="mr-5">
-                                    <img src="{{ comment.author.profile.profile_picture.url }}" 
-                                        alt="{{ comment.author|title }}" 
+                                <div class="me-5">
+                                    <img src="{{ comment.author.profile.profile_picture.url }}"
+                                        alt="{{ comment.author|title }}"
                                         class="rounded-full h-14"
                                     />
                                 </div>
@@ -232,9 +232,9 @@
                             <div class="single-article">
                                 <div class="img-wrapper h-60 mb-3">
                                     <a href="{{ article.get_absolute_url }}">
-                                        <img class="object-fill w-full h-full rounded-xl shadow-xl" 
-                                            src="{{ article.featured_image.url }}" 
-                                            alt="" 
+                                        <img class="object-fill w-full h-full rounded-xl shadow-xl"
+                                            src="{{ article.featured_image.url }}"
+                                            alt=""
                                         />
                                     </a>
                                 </div>
@@ -269,7 +269,7 @@
                     method="POST">
                     {% csrf_token %}
                     <div class="input-container w-50 flex items-center">
-                        <input class="email-input w-full" type="email" 
+                        <input class="email-input w-full" type="email"
                             name="email" id="email" placeholder="Join our newsletter">
                         <button type="submit"
                             class="nl-submit-btn bg-blue-600 text-white shadow-lg">

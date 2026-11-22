@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 
 {% block dashboard-body %}
@@ -55,7 +55,7 @@
                                 <form action="" method="post" class="mark-paid-form d-inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="registrant_id" value="{{ applicant.pk }}">
-                                    <button type="submit" class="btn btn-sm mark-paid-btn btn-outline-primary mb-1 btn-block">
+                                    <button type="submit" class="btn btn-sm mark-paid-btn btn-outline-primary mb-1 w-100">
                                         <span class="mark-paid-text">Mark as paid</span>
                                     </button>
                                 </form>
@@ -79,9 +79,9 @@
 {% endblock %}
 
 {% block extrajs %}
-    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
-    <script>$(document).ready(function(){ $('#unpaidTable').dataTable(); });</script>
+    <script src="{% static 'vendor/datatables/dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap5.min.js' %}"></script>
+    <script>$(document).ready(function(){ $('#unpaidTable').DataTable(); });</script>
     <script>
         const forms = document.querySelectorAll('.mark-paid-form');
         forms.forEach(function(element){

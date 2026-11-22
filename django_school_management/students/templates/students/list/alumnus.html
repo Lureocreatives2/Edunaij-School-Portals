@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 
 {% block dashboard-body %}
@@ -22,7 +22,7 @@
 <div class="card mb-3">
     <div class="card-body">
         <form action="" method="get">
-            <div class="form-row align-items-end">
+            <div class="row g-3 align-items-end">
                 <div class="col">
                     {{ filter.form.admission_student__name|as_crispy_field }}
                 </div>
@@ -39,7 +39,7 @@
                     {{ filter.form.batch|as_crispy_field }}
                 </div>
                 <div class="col">
-                    <div class="form-group">
+                    <div class="mb-3">
                         <input type="submit" value="Filter" class="btn btn-primary">
                     </div>
                 </div>
@@ -63,7 +63,7 @@
           {% for alumni in filter.qs %}
             <tr>
               <td>
-                <img src="{{ alumni.photo.url }}" class="mr-2 rounded-circle" height="24" width="24" alt="{{ alumni.admission_student.name }}">
+                <img src="{{ alumni.photo.url }}" class="me-2 rounded-circle" height="24" width="24" alt="{{ alumni.admission_student.name }}">
                 {{ alumni.admission_student.name }}
               </td>
               <td>
@@ -89,11 +89,11 @@
 {% endblock %}
 
 {% block extrajs %}
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap5.min.js' %}"></script>
 <script>
   $(document).ready(function () {
-    $('#alumnusDataTable').dataTable();
+    $('#alumnusDataTable').DataTable();
   });
 </script>
 {% endblock extrajs %}

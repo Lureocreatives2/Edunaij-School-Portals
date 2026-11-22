@@ -22,14 +22,14 @@
         <form autocomplete="off">
             {% if braintree_error %}
                 <div class="alert alert-danger fade in">
-                    <button class="close" data-dismiss="alert">&times;</button>
+                    <button class="btn-close" data-bs-dismiss="alert"></button>
                     {{ braintree_error|safe }}
                 </div>
             {% endif %}
             <div class="braintree-notifications"></div>
             <div id="braintree-dropin"></div>
-            <input style="background-color: #0783ca" id="submit-button" class="btn btn-success btn-lg btn-block" type="button" value="Pay now!" />
-            <a href="/" style="background-color: #07caa0" class="btn btn-success btn-lg btn-block">Back to website</a>
+            <input style="background-color: #0783ca" id="submit-button" class="btn btn-success btn-lg w-100" type="button" value="Pay now!" />
+            <a href="/" style="background-color: #07caa0" class="btn btn-success btn-lg w-100">Back to website</a>
         </form>
     </div>
 </div>
@@ -68,4 +68,4 @@
     });
 </script>
 {% endblock extrajs %}
-    
+

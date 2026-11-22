@@ -1,4 +1,4 @@
-{% extends 'articles/base.html' %} 
+{% extends 'articles/base.html' %}
 {% load crispy_forms_tags %}
 
 {% block css %}
@@ -6,9 +6,9 @@
     #bd-edit-profile-modal-lg .multiField:not(:last-child) {
       border-bottom: 1px solid #e1e1e1;
     }
-    @media screen 
-      and (min-device-width: 1200px) 
-      and (max-device-width: 1600px) { 
+    @media screen
+      and (min-device-width: 1200px)
+      and (max-device-width: 1600px) {
         #bd-edit-profile-modal-lg .multiField {
         display: flex;
         justify-content: space-between;
@@ -17,13 +17,13 @@
     }
   </style>
 {% endblock css %}
-  
+
 
 {% block content %}
 
 <!-- Page Header -->
 <header class="profile-header-container">
-  <div class="profile-header" 
+  <div class="profile-header"
   {% if author.profile.cover_picture %}
   style="background-image: linear-gradient(
       45deg,
@@ -47,14 +47,14 @@
       <div class="col-sm-12 col-md-4">
         <div class="author-metadata">
           <div class="author-image">
-            
+
             {% if author.profile.profile_picture %}
-              <img src="{{ author.profile.profile_picture.url }}" 
+              <img src="{{ author.profile.profile_picture.url }}"
               width="200" />
             {% else %}
               <img src="https://picsum.photos/180">
             {% endif %}
-              
+
           </div>
           <div class="author-descriptions">
             <!-- desctiption items -->
@@ -103,13 +103,13 @@
                 class="btn btn-outline-dark">
                 Academic Profile
               </a>
-              <button type="button" class="btn btn-primary" 
-                data-toggle="modal" 
-                data-target="#bd-edit-profile-modal-lg">
+              <button type="button" class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#bd-edit-profile-modal-lg">
                 Edit Profile
               </button>
               <!-- MODAL -->
-              <div class="modal fade" id="bd-edit-profile-modal-lg" 
+              <div class="modal fade" id="bd-edit-profile-modal-lg"
                 tabindex="-1" role="dialog"
                 aria-hidden="true">
                 <form action="" method="POST" enctype="multipart/form-data">
@@ -120,12 +120,10 @@
                         <h5 class="modal-title" id="exampleModalCenterTitle">
                           EDIT YOUR PROFILE
                         </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        
+
                         {% if not profile_not_found %}
                           {{ profile_edit_form|crispy }}
                           <hr>
@@ -136,10 +134,10 @@
                             {{ profile_not_found }}
                           </div>
                         {% endif %}
-                          
+
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save changes</button>
                       </div>
                     </div>
@@ -155,9 +153,7 @@
               {% for message in messages %}
                 <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
                   <strong>{{ message }}</strong>
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               {% endfor %}
             {% endif %}
@@ -207,8 +203,8 @@
                     </a>
                   </b>
                 </p>
-                <div class="metadata d-flex justify-content-between pr-4">
-                  <small class="fsm muted mr-3">{{ article.created }}</small>
+                <div class="metadata d-flex justify-content-between pe-4">
+                  <small class="fsm muted me-3">{{ article.created }}</small>
                   <!-- <small class="fsm muted">1500 VIEWS</small> -->
                 </div>
               </div>
@@ -223,4 +219,4 @@
 <!-- Footer -->
 {% include 'articles/inc/_footer.html' %} {% endblock content %}
 
-  
+

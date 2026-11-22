@@ -9,7 +9,7 @@
                 <button type="button"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                     aria-controls="mobile-menu" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
+                    <span class="visually-hidden">Open main menu</span>
                     <!--
             Icon when menu is closed.
 
@@ -45,7 +45,7 @@
                         src="{% if request_institute.logo %}{{ request_institute.logo.url }}{% else %}{% static 'landing/img/footer-logo.png' %}{% endif %}"
                         alt="Workflow">
                 </div>
-                <div class="hidden sm:block sm:ml-6">
+                <div class="hidden sm:block sm:ms-6">
                     <div class="flex space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                         <a href="/" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">
@@ -66,7 +66,7 @@
             </div>
 
             <!-- RIGH SIDE -->
-            <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div class="absolute inset-y-0 right-0 flex items-center pe-2 sm:static sm:inset-auto sm:ms-6 sm:pe-0">
 
                 {% if user.is_authenticated %}
                     {% if user.approval_status == 'a' %}
@@ -78,7 +78,7 @@
                             hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                             Profile
                         </a>
-                        <a href="{% url 'account_logout' %}" class="text-gray-300 hover:bg-gray-700 
+                        <a href="{% url 'account_logout' %}" class="text-gray-300 hover:bg-gray-700
                                         hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                             Logout
                         </a>
@@ -89,11 +89,11 @@
                     </a>
                     {% endif %}
                 {% else %}
-                <a href="{% url 'account_login' %}" class="bg-gray-900 text-gray-300 mr-3 hover:bg-gray-700 
+                <a href="{% url 'account_login' %}" class="bg-gray-900 text-gray-300 me-3 hover:bg-gray-700
                             hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                     Login
                 </a>
-                <a href="{% url 'account_signup' %}" class="bg-blue-800 text-gray-300 hover:bg-gray-700 
+                <a href="{% url 'account_signup' %}" class="bg-blue-800 text-gray-300 hover:bg-gray-700
                             hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                     Create Account
                 </a>

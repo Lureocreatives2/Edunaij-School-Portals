@@ -18,7 +18,7 @@
     {% if existing_subject_groups %}
     <div class="card mb-3">
       <div class="card-body">
-        <label class="small font-weight-bold text-muted">Copy from existing group</label>
+        <label class="small fw-bold text-muted">Copy from existing group</label>
         <p class="small text-muted mb-2">Pre-fill {{ department_label|lower }}, {{ semester_label|lower }}, and subject selection from an existing group.</p>
         <select id="copyFromSelect" class="form-control form-control-sm" style="max-width: 320px;">
           <option value="">— Choose a group to copy from —</option>
@@ -36,8 +36,8 @@
       {% csrf_token %}
       <div class="card mb-3">
         <div class="card-body">
-          <div class="form-inline">
-            <label class="sr-only" for="department">{{ department_label }}</label>
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <label class="visually-hidden" for="department">{{ department_label }}</label>
             <select name="department" class="form-control mb-2 mr-sm-2" id="department">
               <option value="" {% if not copy_from_group %}selected{% endif %} disabled>Choose {{ department_label }}</option>
               {% for dept in departments %}
@@ -45,7 +45,7 @@
               {% endfor %}
             </select>
 
-            <label class="sr-only" for="semester">{{ semester_label }}</label>
+            <label class="visually-hidden" for="semester">{{ semester_label }}</label>
             <select name="semester" class="form-control mb-2 mr-sm-2" id="semester">
               <option value="" {% if not copy_from_group %}selected{% endif %} disabled>Choose {{ semester_label }}</option>
               {% for semester in semesters %}
@@ -88,9 +88,9 @@
 
       <div id="hiddenInputs"></div>
 
-      <div class="text-right mt-3">
+      <div class="text-end mt-3">
         <button type="submit" class="btn btn-primary">Create subject group</button>
-        <a href="{% url 'result:subject_groups' %}" class="btn btn-outline-secondary ml-2">Cancel</a>
+        <a href="{% url 'result:subject_groups' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
       </div>
     </form>
   </div>

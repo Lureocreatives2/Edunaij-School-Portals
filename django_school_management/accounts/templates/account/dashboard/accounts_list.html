@@ -33,7 +33,7 @@
                             <td>{% if account.assigned_school_email %}{{ account.assigned_school_email }}<br><small>Mailbox setup pending</small>{% else %}&mdash;{% endif %}</td>
                             <td>
                                 {% for group in account.groups.all %}
-                                    <span class="badge badge-dark">
+                                    <span class="badge text-bg-dark">
                                         {{ group }}
                                     </span>
                                 {% empty %}

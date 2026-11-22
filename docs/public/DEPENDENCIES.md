@@ -22,7 +22,7 @@ Replaced bundled jQuery 2.1.4 and 3.4.1 references with official jQuery 3.8.0. U
 - pip check reported no broken requirements.
 - All 113 project regression tests passed, including image decoding, PDF generation, JWT options preservation and expiry checks.
 - Render settings, deployment checks, frontend collection and production asset-serving checks passed. The existing optional HSTS policy warnings remain documented in RENDER.md.
-- JavaScript syntax checks passed for jQuery and the lightbox compatibility update. Interactive browser testing of legacy school-page plugins remains outstanding.
+- JavaScript syntax checks passed for jQuery and the lightbox compatibility update. The subsequent Bootstrap 5 browser verification is recorded below.
 
 Run the Python dependency scan with:
 
@@ -33,11 +33,15 @@ python -m pip_audit -r requirements.txt --no-deps --disable-pip --progress-spinn
 
 The snapshot pins transitive dependencies as well as direct packages. The CI scan runs on requirements changes and weekly. Dependabot checks Python and GitHub Actions updates weekly. Keep the resolved snapshot complete when introducing new dependencies.
 
-## Follow-up
+## Frontend follow-up completed
 
-The manually bundled Bootstrap 4 and other legacy frontend plugins still need a separate compatibility and security review. The zero-advisory result above covers the Python snapshot. Migrating Bootstrap requires checking the school forms, tables, modals and navigation against the newer API.
+The school templates now use Bootstrap 5.3.9, DataTables 3.1.5 with its Bootstrap 5 integration, Select2 4.1.1, Font Awesome Free 7.3.1 and jQuery 3.8.0. Bootstrap form rendering uses crispy-bootstrap5 and django-bootstrap5. Unsupported Bootstrap 4 bundles and unused carousel, lightbox, uploader demo and Adminator bundles were retired from deployable source.
 
-A fresh Linux installation and hosted service verification remain part of the Render rollout.
+Unversioned icon-kit scripts, inherited analytics and obsolete browser shims were removed. The root package.json and package-lock.json pin browser dependencies. Run `npm ci --ignore-scripts` and `npm run vendor` to reproduce the committed assets and licences. A file-hash manifest is stored at static/vendor/manifest.json. Render serves the committed assets without a Node build step.
+
+Both npm audit and the Python scan returned zero known advisories. All 115 regression tests passed, including the migrated school pages and monthly PDF report. Edge browser checks on fictional school pages confirmed modal opening and dismissal, form rendering, table filtering and reset, and mobile navigation. Desktop and narrow-screen screenshots were inspected. Production settings and asset-serving checks passed after the migration.
+
+Weekly security CI now checks both ecosystems and verifies that vendored frontend files match the lockfile. A fresh hosted deployment, SMTP delivery, school DNS and backup restoration remain rollout checks for Render.
 
 ## Sources
 

@@ -10,8 +10,8 @@
     <title>DPI BLOG | Learn, Share and Practice Writing Skills</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'articles/css/tw_theme.css' %}" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
-        integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/fontawesome/css/v4-shims.min.css' %}">
 </head>
 
 <body>
@@ -24,7 +24,7 @@
             <!-- hero banner -->
             <div class="banner w-full">
                 <div class="banner-bg w-full">
-                    <img src="{{ latest_featured_article.featured_image.url }}" 
+                    <img src="{{ latest_featured_article.featured_image.url }}"
                         class="w-full h-full"
                         alt="{{ latest_featured_article.title }}" />
                 </div>
@@ -51,7 +51,7 @@
                     <div class="single-article">
                         <div class="img-wrapper h-60">
                             <a href="">
-                                <img class="object-fill w-full h-full rounded-xl shadow-xl" 
+                                <img class="object-fill w-full h-full rounded-xl shadow-xl"
                                     src="{{ article.featured_image.url }}" alt="{{ article.title }}">
                             </a>
                         </div>
@@ -87,8 +87,8 @@
                     <div class="single-article">
                         <div class="img-wrapper h-60">
                             <a href="{{ article.get_absolute_url }}">
-                                <img class="object-fill w-full h-full rounded-xl shadow-xl" 
-                                    src="{{ article.featured_image.url }}" 
+                                <img class="object-fill w-full h-full rounded-xl shadow-xl"
+                                    src="{{ article.featured_image.url }}"
                                     alt="{{ article.title }}">
                             </a>
                         </div>
@@ -127,7 +127,7 @@
                     method="POST">
                     {% csrf_token %}
                     <div class="input-container w-50 flex items-center">
-                        <input class="email-input w-full" type="email" 
+                        <input class="email-input w-full" type="email"
                             name="email" id="email" placeholder="Join our newsletter">
                         <button type="submit"
                             class="nl-submit-btn bg-blue-600 text-white shadow-lg">

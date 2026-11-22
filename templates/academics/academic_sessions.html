@@ -39,9 +39,9 @@
                         <td>{{ academic_session }}</td>
                         <td>
                             {% if request_institute.current_session_id == academic_session.pk %}
-                                <span class="badge badge-success">Current</span>
+                                <span class="badge text-bg-success">Current</span>
                             {% else %}
-                                <a href="{% url academic_urls.set_academic_session_current pk=academic_session.pk %}" class="badge badge-light text-primary">Set as current</a>
+                                <a href="{% url academic_urls.set_academic_session_current pk=academic_session.pk %}" class="badge text-bg-light text-primary">Set as current</a>
                             {% endif %}
                         </td>
                         <td>
@@ -68,7 +68,7 @@
             <div class="card-body">
                 <h6 class="card-title">Quick add</h6>
                 <p class="small text-muted mb-2">Or add a session here without leaving the page.</p>
-                <a href="" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#addSessionModal">Add new session</a>
+                <a href="" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addSessionModal">Add new session</a>
             </div>
         </div>
         <div class="modal fade" id="addSessionModal" tabindex="-1" role="dialog" aria-labelledby="addSessionModalLabel" aria-hidden="true">
@@ -76,9 +76,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addSessionModalLabel">Add New Session</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="" method="post">

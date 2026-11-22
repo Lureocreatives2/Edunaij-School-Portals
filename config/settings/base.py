@@ -87,7 +87,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'corsheaders',
     'crispy_forms',
-    'crispy_bootstrap4',
+    'crispy_bootstrap5',
     'rolepermissions',
     'taggit',
     'django_extensions',
@@ -103,7 +103,7 @@ THIRD_PARTY_APPS = [
     'import_export',
     # 'admin_honeypot',   # admin_honeypot doesn't support Django 4
     'django_tables2',
-    'bootstrap4',
+    'django_bootstrap5',
     'django_file_form',
     'tinymce',
     # API Documentation and Advanced Features
@@ -339,7 +339,9 @@ PROMETHEUS_LATENCY_BUCKETS = (
 ROLEPERMISSIONS_MODULE = 'django_school_management.academics.roles'
 # ROLEPERMISSIONS_REGISTER_ADMIN = True
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap5',)
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+DJANGO_TABLES2_TEMPLATE = 'django_tables2/bootstrap5.html'
 
 CKEDITOR_UPLOAD_PATH = 'ck-uploads/'
 CKEDITOR_IMAGE_BACKEND = 'pillow'

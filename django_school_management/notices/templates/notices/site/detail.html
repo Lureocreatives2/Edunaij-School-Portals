@@ -13,13 +13,13 @@
                             {{ notice.title }}
                         </h3>
 
-                        
+
                         {% if notice.file %}
                             <div class="notice-file mb-5">
                                 <!-- TODO: Render PDF/Image File Here -->
                                 <!-- notice.file.<render_somehow> -->
                                 <a  href="{{ notice.file.url }}"
-                                    class="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 mt-1"
+                                    class="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none me-1 mb-1 ease-linear transition-all duration-150 mt-1"
                                     download>
                                     Download Notice
                                 </a>
@@ -40,10 +40,10 @@
                         </div>
 
                         <!-- All PDF Documents -->
-                        
+
                         {% for document in notice.documents.all %}
                             <div class="w-full mb-5">
-                                <object data="{{ document.file.url }}" type="application/pdf" 
+                                <object data="{{ document.file.url }}" type="application/pdf"
                                     class="w-full h-full"
                                     style="height: 40rem;">
                                     <a href="{{ document.file.url }}">
@@ -67,7 +67,7 @@
                         <div class="notice-metadata-topbar h-full">
                             <div class="topbar-title text-white text-xl bg-indigo-500 px-5 py-3">
                                 Notice Insights
-                                
+
                                 {% if notice.is_past_due %}
                                 <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs">Inactive</span>
                                 {% else %}
@@ -76,8 +76,8 @@
                             </div>
                             <div class="metadata-box p-5 h-full">
                                 <div
-                                    class="bordered-box text-sm text-gray-700 border-dashed border-md 
-                                    border-4 border-opacity-80 border-blue-400 p-2 2xl:p-5"  
+                                    class="bordered-box text-sm text-gray-700 border-dashed border-md
+                                    border-4 border-opacity-80 border-blue-400 p-2 2xl:p-5"
                                     style="height: calc(100% - 72px);">
                                     <!-- expiracy -->
                                     <div class="mb-2">
@@ -105,7 +105,7 @@
                                     <!-- Target audience -->
                                     <div class="mb-2">
                                         <strong class="italic">Applicable for: </strong>
-                                        <div class="ml-2">
+                                        <div class="ms-2">
                                             {% for group in notice.notfiy_groups.all %}
                                             <div>
                                                 {{group}},
@@ -121,7 +121,7 @@
                                     <div class="mb-2">
                                         <strong class="italic">Responses: </strong>
 
-                                        <div class="flex items-center ml-2 mt-2">
+                                        <div class="flex items-center ms-2 mt-2">
                                             {% for response in notice.responses.all %}
                                                 <img class="w-6 h-6 rounded-full border-gray-200 border transform hover:scale-125"
                                                     title="{{ response.responder.username|title }}"
@@ -136,20 +136,20 @@
                                     </div>
                                     <!-- User Response -->
                                     <div class="text-center mt-5">
-                                        
+
                                         {% if user_response_status != 'r' %}
                                             <a href="{% url 'account_login' %}?next=/notices/{{ notice.pk }}/"
-                                                class="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                                class="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none me-1 mb-1 ease-linear transition-all duration-150"
                                                 type="button">
                                                 Please login to record your response
                                             </a>
                                         {% else %}
-                                            <a class="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                            <a class="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none me-1 mb-1 ease-linear transition-all duration-150"
                                                 type="button">
                                                 Your Response Was Recorded
                                             </a>
                                         {% endif %}
-                                            
+
                                     </div>
                                 </div>
                             </div>

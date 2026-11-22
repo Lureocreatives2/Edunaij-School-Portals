@@ -14,9 +14,9 @@
     <h4>Manage Articles</h4>
 
     <div class="row justify-content-between mb-2">
-        <div class="col-md-5 pl-0">
-            <form action="" class="form-inline">
-                <label for="search_article" class="sr-only">Search articles</label>
+        <div class="col-md-5 ps-0">
+            <form action="" class="d-flex flex-wrap align-items-center gap-2">
+                <label for="search_article" class="visually-hidden">Search articles</label>
                 <input type="text"
                 class="form-control mr-sm-2"
                 id="search_article"
@@ -24,12 +24,12 @@
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
         </div>
-        <div class="col-md-4 pr-0 d-flex justify-content-end align-items-start">
-            <a href="{% url 'articles:publish_article_from_dashboard' %}" class="btn btn-primary mr-1">
+        <div class="col-md-4 pe-0 d-flex justify-content-end align-items-start">
+            <a href="{% url 'articles:publish_article_from_dashboard' %}" class="btn btn-primary me-1">
                 Publish Article
             </a>
             <button type="button" class="btn btn-primary"
-            data-toggle="modal" data-target="#filterModal">
+            data-bs-toggle="modal" data-bs-target="#filterModal">
                 Show Filters
             </button>
             <!-- Modal -->
@@ -39,9 +39,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="filterModalTitle">Filter Articles</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form action="" method="get">

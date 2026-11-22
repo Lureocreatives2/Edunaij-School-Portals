@@ -7,12 +7,12 @@
                 id="mobile-menu-toggler"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                     aria-controls="mobile-menu" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
+                    <span class="visually-hidden">Open main menu</span>
                     <!--
                         Icon when menu is closed.
-            
+
                         Heroicon name: outline/menu
-            
+
                         Menu open: "hidden", Menu closed: "block"
                     -->
                     <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -22,9 +22,9 @@
                     </svg>
                     <!--
                     Icon when menu is open.
-        
+
                     Heroicon name: outline/x
-        
+
                     Menu open: "block", Menu closed: "hidden"
                     -->
                     <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -45,14 +45,14 @@
                 </div>
             </div>
             <div
-                class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                
+                class="absolute inset-y-0 right-0 flex items-center pe-2 sm:static sm:inset-auto sm:ms-6 sm:pe-0">
+
                 {% if user.is_authenticated %}
                     <a href="{% url account_urls.dashboard %}" class="text-gray-900 hover:bg-blue-300 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                         Dashboard
                     </a>
                 {% endif %}
-                
+
                 <a href="/static"
                     class="text-gray-900 hover:bg-blue-300 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home
                 </a>
@@ -64,21 +64,21 @@
                     Articles
                 </a>
                 <!-- Profile dropdown -->
-                <div class="ml-3 relative">
+                <div class="ms-3 relative">
                     <div>
                         <button type="button"
                             class="text-gray-900 bg-blue-300 text-blue-600 block px-3 py-2 rounded-md text-base font-medium flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white"
                             id="user-menu" aria-expanded="false" aria-haspopup="true">
-                            
+
                             {% if not user.is_authenticated %}
-                                <span class="sr-only">Sign in</span>
+                                <span class="visually-hidden">Sign in</span>
                                 Sing in
                             {% else %}
-                                <span class="sr-only">Account</span>
+                                <span class="visually-hidden">Account</span>
                                 Account
                             {% endif %}
-                                
-                            <svg class="-mr-1 ml-2 h-5 w-5"
+
+                            <svg class="-me-1 ms-2 h-5 w-5"
                                 x-description="Heroicon name: solid/chevron-down"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 aria-hidden="true">
@@ -93,7 +93,7 @@
                     <div id="user-menu-dropdown"
                         class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-50 focus:outline-none"
                         role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
-                        
+
                         {% if user.is_authenticated %}
                             <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 role="menuitem">
@@ -113,7 +113,7 @@
                                 Login
                             </a>
                         {% endif %}
-                        
+
                     </div>
                 </div>
             </div>

@@ -1,0 +1,20 @@
+{
+  "name": "edunaij-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "Versioned browser dependencies for edunaij Django templates",
+  "scripts": {
+    "vendor": "python scripts/vendor_frontend.py",
+    "audit:security": "npm audit --omit=dev"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "7.3.1",
+    "@popperjs/core": "2.11.8",
+    "bootstrap": "5.3.9",
+    "datatables.net": "3.1.5",
+    "datatables.net-bs5": "3.1.5",
+    "jquery": "3.8.0",
+    "select2": "4.1.1"
+  }
+}

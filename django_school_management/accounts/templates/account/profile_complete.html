@@ -1,15 +1,15 @@
-{% extends 'website/partials/website_base.html' %} 
-{% load static %} 
-{% load crispy_forms_tags %} 
+{% extends 'website/partials/website_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
 {% block extra_css %}
   <style type="text/css">
     #profile-edit-form .multiField:not(:last-child) {
       border-bottom: 1px solid #e1e1e1;
     }
-    @media screen 
-      and (min-device-width: 1200px) 
-      and (max-device-width: 1600px) { 
+    @media screen
+      and (min-device-width: 1200px)
+      and (max-device-width: 1600px) {
         #profile-edit-form .multiField {
         display: flex;
         justify-content: space-between;
@@ -18,7 +18,7 @@
     }
   </style>
 {% endblock extra_css %}
-  
+
 
 {% block main_content %}
 <!-- Header Section Start -->
@@ -51,20 +51,20 @@
               <img id="profile-image" title="Upload new profile picture"
                 style="cursor: pointer;"
               {% if user.profile.profile_picture %}
-                src="{{ user.profile.profile_picture.url }}" 
+                src="{{ user.profile.profile_picture.url }}"
               {% else %}
-                src="{% static 'images/media-alt/user-icon.png' %}" 
+                src="{% static 'images/media-alt/user-icon.png' %}"
               {% endif %}
               width="150" />
             </form>
-            <div class="card-text align-self-end ml-3">
-              <div class="text-left">
+            <div class="card-text align-self-end ms-3">
+              <div class="text-start">
                   <h6 class="mb-0">
                   <span>{{ request.user.username }}</span>
                   <span class="small text-dark"
                     style="cursor: pointer;"
-                    data-toggle="modal" 
-                    data-target="#request-update-modal">
+                    data-bs-toggle="modal"
+                    data-bs-target="#request-update-modal">
                     <span id="update-verification-icon"
                       title="Update Verification Request">
                       <i class="fas fa-cog"></i>
@@ -94,14 +94,14 @@
                   Request for approval
               </button>
               {% else %}
-              <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#request-update-modal">
+              <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#request-update-modal">
                   Request for approval
               </button>
               {% endif %}
           </div>
-          {% endif %} 
-          
-          {% if messages %} 
+          {% endif %}
+
+          {% if messages %}
             {% for message in messages %}
               <div
                 class="alert {{ message.tags }} alert-dismissible fade show"
@@ -110,16 +110,14 @@
                 <strong>{{ message }}</strong>
                 <button
                   type="button"
-                  class="close"
-                  data-dismiss="alert"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
                   aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
+                ></button>
               </div>
-            {% endfor %} 
-          {% endif %} 
-          
+            {% endfor %}
+          {% endif %}
+
           <!-- Form for UnVerified User (SENDS A VERIFICATION REQUEST) -->
           {% if user.approval_status != 'a' %}
             <form method="post">
@@ -130,16 +128,14 @@
                 <strong>Your account is not verified.</strong>
                 <button
                   type="button"
-                  class="close"
-                  data-dismiss="alert"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
                   aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
+                ></button>
               </div>
           {% else %}
             <!-- Form for verfied users (UPDATES USER PROFILE DETAILS) -->
-            <form action="" method="POST" 
+            <form action="" method="POST"
               enctype="multipart/form-data"
               id="profile-edit-form"
             >
@@ -159,7 +155,7 @@
                   </div>
                 {% endif %}
                 <input type="submit" value="Save Changes"
-                  class="btn btn-secondary float-right mt-3
+                  class="btn btn-secondary float-end mt-3
                   shadow"
                   name="user-profile-update-form">
               </div>
@@ -172,9 +168,9 @@
 </section>
 
 
-<div class="modal fade" 
-  id="request-update-modal" tabindex="-1" 
-  role="dialog" 
+<div class="modal fade"
+  id="request-update-modal" tabindex="-1"
+  role="dialog"
   aria-hidden="true">
   <form action="{% url account_urls.profile_complete %}" method="post">
     {% csrf_token %}
@@ -184,15 +180,13 @@
           <h6 class="" id="">
             Change Profile Verification
           </h6>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           {{ verification_form|crispy }}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </div>
@@ -255,4 +249,4 @@
   })
 
 </script>
-{% endblock %} 
+{% endblock %}

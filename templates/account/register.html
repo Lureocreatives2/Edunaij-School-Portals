@@ -12,7 +12,7 @@
                         {% csrf_token %}
                         {{ user_form|crispy }}
                         <!-- <input type="hidden" name="next" value="{{ next }}"> -->
-                        <button type="submit" class="btn btn-outline-info float-right">Register</button>
+                        <button type="submit" class="btn btn-outline-info float-end">Register</button>
                     </form>
                     <a class="d-block" href="{% url 'account_login'  %}">
                         Back to login

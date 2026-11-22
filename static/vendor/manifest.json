@@ -1,0 +1,72 @@
+{
+  "vendor/bootstrap/bootstrap.min.css": {
+    "package": "bootstrap",
+    "version": "5.3.9",
+    "sha256": "9caac977a0af0c2229abd397eee3345899c4020da2a1a0b711c1cc543fe3719d"
+  },
+  "vendor/bootstrap/bootstrap.bundle.min.js": {
+    "package": "bootstrap",
+    "version": "5.3.9",
+    "sha256": "4ad2ad30a7df1fa0a615c4cfeb1aeffbe92019a8dff0262c99464acbd56dca5c"
+  },
+  "js/vendor/jquery-3.8.0.min.js": {
+    "package": "jquery",
+    "version": "3.8.0",
+    "sha256": "42c9beb67d11f78edb63796d0d9bfb074d0fc1a20b47ad72fcb7fb0f3dc6a6fe"
+  },
+  "vendor/datatables/dataTables.min.js": {
+    "package": "datatables.net",
+    "version": "3.1.5",
+    "sha256": "38017a5586acd9c6eb6bbfe8b6938e1a25bdc717c5acfcb07e0c9d663282c59d"
+  },
+  "vendor/datatables/dataTables.bootstrap5.min.js": {
+    "package": "datatables.net-bs5",
+    "version": "3.1.5",
+    "sha256": "f21ebd37ba224864e9224c99bd8d29895dfc36f4be4af516d4c48404017f6503"
+  },
+  "vendor/datatables/dataTables.bootstrap5.min.css": {
+    "package": "datatables.net-bs5",
+    "version": "3.1.5",
+    "sha256": "5ff84d5553f3a60b4927ae5732c2e3799d10c348f10d5b5ebf49f0035352aa05"
+  },
+  "vendor/fontawesome/css/all.min.css": {
+    "package": "@fortawesome/fontawesome-free",
+    "version": "7.3.1",
+    "sha256": "e0b69df26e19596d4b81bf7eb0c54b6047e7221ec18d5d4d40c11eefd3ef8a4b"
+  },
+  "vendor/fontawesome/css/v4-shims.min.css": {
+    "package": "@fortawesome/fontawesome-free",
+    "version": "7.3.1",
+    "sha256": "1b5c5b035e37ff0a128238e2cf18eeb7df588cb440cb543ba3ff983a04953d72"
+  },
+  "vendor/fontawesome/webfonts/fa-brands-400.woff2": {
+    "package": "@fortawesome/fontawesome-free",
+    "version": "7.3.1",
+    "sha256": "ff66d1cfb67dbe3da432bbe36572cabfa4eef0e591303c2cba111474ba1d15bc"
+  },
+  "vendor/fontawesome/webfonts/fa-regular-400.woff2": {
+    "package": "@fortawesome/fontawesome-free",
+    "version": "7.3.1",
+    "sha256": "f4722d10b9e1b41eefe3b51a026312ee1970edb7782f94b0080d3d475945734c"
+  },
+  "vendor/fontawesome/webfonts/fa-solid-900.woff2": {
+    "package": "@fortawesome/fontawesome-free",
+    "version": "7.3.1",
+    "sha256": "24e5fae26b41c08b2df81c91669f5aaae71d81a84a4713fc56b5c621b78dd456"
+  },
+  "vendor/fontawesome/webfonts/fa-v4compatibility.woff2": {
+    "package": "@fortawesome/fontawesome-free",
+    "version": "7.3.1",
+    "sha256": "c776ee1f1fe21cd72195e91de7afd5c9dbd007e9d06016254d65fbcc091398ca"
+  },
+  "vendor/select2/select2.min.js": {
+    "package": "select2",
+    "version": "4.1.1",
+    "sha256": "bf4c8eb2634250935fa3af4865198fe0c5166aa26c3fa5d43db36eb8c2843700"
+  },
+  "vendor/select2/select2.min.css": {
+    "package": "select2",
+    "version": "4.1.1",
+    "sha256": "bc90534ad9dccf334329047777c8dcb681a67102f0f1300b72eae1af62acc3f9"
+  }
+}

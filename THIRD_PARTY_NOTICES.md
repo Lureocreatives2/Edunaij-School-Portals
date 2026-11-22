@@ -8,4 +8,4 @@ Tabler and Flowbite were consulted as interface references. Design references do
 
 The curated archive omits inactive CKEditor static assets and the jQuery File Upload sample server. Historical migrations still reference django-ckeditor, so its Python dependency remains.
 
-The dependency review is recorded in docs/public/DEPENDENCIES.md. The shared jQuery vendor asset is version 3.8.0 from the official jQuery CDN. The older lightbox includes a local event-handler compatibility update.
+The dependency review is recorded in docs/public/DEPENDENCIES.md. The shared jQuery vendor asset is version 3.8.0 from the official jQuery CDN. Bootstrap 5, DataTables, Select2 and Font Awesome Free versions are pinned in package-lock.json. Their licence files are included beside the vendored assets. Retired frontend libraries remain available in Git history.

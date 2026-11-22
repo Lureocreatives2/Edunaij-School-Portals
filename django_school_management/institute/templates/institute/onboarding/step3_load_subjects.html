@@ -51,14 +51,14 @@
 
   <form method="post">
     {% csrf_token %}
-    <div class="form-group">
+    <div class="mb-3">
       <label for="id_curriculum">{{ form.curriculum.label }}</label>
       {{ form.curriculum }}
       {% if form.curriculum.errors %}
         <ul class="errorlist">{{ form.curriculum.errors }}</ul>
       {% endif %}
     </div>
-    <div class="form-group checkbox-group">
+    <div class="mb-3 checkbox-group">
       <label>{{ form.class_range.label }}</label>
       {{ form.class_range }}
       {% if form.class_range.errors %}

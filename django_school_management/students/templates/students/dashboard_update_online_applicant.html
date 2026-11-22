@@ -49,11 +49,11 @@
             {% for record in counseling_records.all %}
                 <li class="list-group-item">
                     {{ record }} <br>
-                    <span class="badge badge-primary mr-1">
+                    <span class="badge text-bg-primary me-1">
                         <strong>Comment by:</strong>
                         {{ record.counselor }}
                     </span>
-                    <span class="badge badge-info text-light">
+                    <span class="badge text-bg-info text-light">
                         <strong>Date:</strong>
                         {{ record.created|date:"d b Y "}}
                     </span>

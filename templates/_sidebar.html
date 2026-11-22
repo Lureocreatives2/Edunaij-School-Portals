@@ -8,7 +8,7 @@
         <div class="peer peer-greed"><a class="sidebar-link td-n" href="{% url account_urls.dashboard %}">
             <div class="peers ai-c fxw-nw">
               <div class="peer">
-                <div class="logo pl-2">
+                <div class="logo ps-2">
                   {% if request_institute.logo %}
                   <img src="{{ request_institute.logo.url }}" alt="{{ request_institute.name }}" width="40" style="border-radius:8px;">
                   {% else %}
@@ -219,7 +219,7 @@
             </a>
           </li>
           <li>
-            <a class="sidebar-link" 
+            <a class="sidebar-link"
               href="{% url 'articles:dashboard_manage' %}">
               Manage Articles
             </a>
@@ -250,13 +250,13 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a class="sidebar-link" 
+            <a class="sidebar-link"
               href="{% url 'payments:dashboard_ssl_payments_list' %}">
               Manage Payments
             </a>
           </li>
           <li>
-            <a class="sidebar-link" 
+            <a class="sidebar-link"
               href="{% url 'payments:dashboard_ssl_payments_list' %}">
               Student Payments
             </a>
@@ -277,26 +277,26 @@
         <ul class="dropdown-menu">
           {% if perms.auth.add_user %}
             <li>
-              <a class="sidebar-link" 
+              <a class="sidebar-link"
                 href="{% url account_urls.add_user %}">
                 Add People
               </a>
             </li>
             <li>
-            <a class="sidebar-link" 
+            <a class="sidebar-link"
                 href="{% url account_urls.user_requests %}">
                 User Requests
               </a>
             </li>
           {% endif %}
           <li>
-            <a class="sidebar-link" 
+            <a class="sidebar-link"
               href="{% url account_urls.all_accounts %}">
               Users
             </a>
           </li>
           <li>
-            <a class="sidebar-link" 
+            <a class="sidebar-link"
               href="{% url account_urls.groups %}">
               Groups
             </a>

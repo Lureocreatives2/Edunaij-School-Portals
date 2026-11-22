@@ -6,31 +6,18 @@
     <title>{% block title %}{{ request_institute.site_title }} | Blog{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Analytics -->
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQ3GYTDRV1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-QQ3GYTDRV1');
-    </script>
-    
     {% block meta_tags %}{% endblock %}
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <![endif]-->
 
-    <link rel="icon" 
+
+    <link rel="icon"
       href="{% if request_institute.site_favicon %}{{request_institute.site_favicon.url}}{% else %}{% static 'articles/images/favicons/favicon.ico' %}{% endif %}">
     <!-- Latest compiled and minified Bootstrap CSS -->
-    <link href="{% static 'articles/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Your stuff: Third-party CSS libraries go here -->
     <!-- Custom fonts for this template -->
-    <link href="{% static 'articles/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'vendor/fontawesome/css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/fontawesome/css/v4-shims.min.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     <!-- This file stores project-specific CSS -->
@@ -47,11 +34,11 @@
        id="mainNav">
         <div class="container">
           <a class="navbar-brand p-0" href="{% url 'articles:home' %}">
-            <img src="{{ request_institute.logo.url }}" 
+            <img src="{{ request_institute.logo.url }}"
               alt="{{ request_institute.site_title }}"
               width="" height="50">
           </a>
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             topics
             <i class="fas fa-bars"></i>
           </button>
@@ -60,7 +47,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'articles:home' %}">Home</a>
               </li>
-              
+
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'articles:all_articles' %}">
                   Articles
@@ -73,14 +60,14 @@
               {% if request.user.is_authenticated %}
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" 
+                  <a class="nav-link"
                     href="{% url 'articles:author_profile' slug=user.username %}">
                     {% trans "My Profile" %}
                   </a>
                 </li>
                 <li class="nav-item">
                   {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" 
+                  <a class="nav-link"
                     href="{% url 'account_logout' %}">
                     {% trans "Logout" %}
                   </a>
@@ -106,7 +93,7 @@
 
       <!-- {% if messages %}
           {% for message in messages %}
-              <div style="position: relative; top: 30px;" class="alert {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+              <div style="position: relative; top: 30px;" class="alert {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
           {% endfor %}
       {% endif %} -->
 
@@ -125,7 +112,7 @@
       <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
       <!-- Bootstrap core JavaScript -->
       <script src="{% static 'js/vendor/jquery-3.8.0.min.js' %}"></script>
-      <script src="{% static 'articles/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
 
       <!-- Your stuff: Third-party javascript libraries go here -->
 

@@ -46,6 +46,9 @@ from django.conf import settings
 application = get_wsgi_application()
 client = Client(HTTP_HOST='edunaij-check.onrender.com')
 for path in ('/', '/static/edunaij/landing.css', '/static/edunaij/landing.js',
+             '/static/vendor/bootstrap/bootstrap.min.css',
+             '/static/vendor/bootstrap/bootstrap.bundle.min.js',
+             '/static/vendor/fontawesome/css/all.min.css',
              '/static/edunaij/classroom.webp', '/static/edunaij/workspace-preview.webp'):
     response = client.get(path, secure=True)
     assert response.status_code == 200, (path, response.status_code)

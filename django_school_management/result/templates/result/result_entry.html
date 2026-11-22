@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 
 {% block dashboard-body %}
@@ -25,7 +25,7 @@
             <div class="card-body">
                 <h4 class="mb-3">Add Result: Find Subjects <span id="title-dept"></span></h4>
                 <form action="" method="get">
-                    <div class="form-row align-items-end">
+                    <div class="row g-3 align-items-end">
                         <div class="col">
                             {{ subject_group_filter.form.department|as_crispy_field }}
                         </div>
@@ -33,7 +33,7 @@
                             {{ subject_group_filter.form.semester|as_crispy_field }}
                         </div>
                         <div class="col">
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <input type="submit" value="Filter" class="btn btn-primary">
                             </div>
                         </div>
@@ -49,9 +49,7 @@
     <div class="col-md-12">
         {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 {{ message }}
             </div>
         {% endfor %}
@@ -108,15 +106,15 @@
         <div class="col-md-12">
             <div class="row justify-content-end">
                 <div class="col-md-3">
-                    <div class="form-group">
+                    <div class="mb-3">
                         <input class="form-control"
                             type="text" name="student_id" placeholder="Student ID"
                             id="student_id" aria-label="Student ID">
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="form-group">
-                        <input class="btn btn-block btn-primary" type="submit" value="Add Result">
+                    <div class="mb-3">
+                        <input class="btn w-100 btn-primary" type="submit" value="Add Result">
                     </div>
                 </div>
             </div>

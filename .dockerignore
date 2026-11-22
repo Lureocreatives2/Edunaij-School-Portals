@@ -18,3 +18,5 @@ dump.json
 datadump*.json
 dist
 docs
+
+node_modules

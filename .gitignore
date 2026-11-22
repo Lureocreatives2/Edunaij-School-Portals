@@ -71,3 +71,5 @@ htmlcov/
 /docs/*check*.json
 /docs/nice-college*.json
 /docs/ui-preview/
+
+node_modules/

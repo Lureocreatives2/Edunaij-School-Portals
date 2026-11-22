@@ -23,8 +23,8 @@
                     </a>
                   </b>
                 </p>
-                <div class="metadata d-flex justify-content-between pr-4">
-                  <small class="fsm muted mr-3">{{ article.created }}</small>
+                <div class="metadata d-flex justify-content-between pe-4">
+                  <small class="fsm muted me-3">{{ article.created }}</small>
                   <!-- <small class="fsm muted">1500 VIEWS</small> -->
                 </div>
               </div>
@@ -64,7 +64,7 @@
                 </li>
               {% endif %}
             {% endfor %}
-            
+
             {% if page_obj.has_next %}
               <li class="page-item">
                 <a class="page-link" href="?page={{ page_obj.next_page_number }}">

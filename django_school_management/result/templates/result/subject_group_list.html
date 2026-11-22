@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_header %}
-<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/datatables/dataTables.bootstrap5.min.css' %}">
 {% endblock %}
 
 {% block dashboard-body %}
@@ -37,7 +37,7 @@
             <td>{{ subject_group.semester }}</td>
             <td>
               {% for subject in subject_group.subjects.all %}
-                <span class="badge badge-light mr-1">{{ subject }}</span>
+                <span class="badge text-bg-light me-1">{{ subject }}</span>
               {% endfor %}
             </td>
           </tr>
@@ -58,11 +58,11 @@
 {% endblock %}
 
 {% block extrajs %}
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.min.js' %}"></script>
+<script src="{% static 'vendor/datatables/dataTables.bootstrap5.min.js' %}"></script>
 <script>
   $(document).ready(function () {
-    $('#subjectGroupDataTable').dataTable();
+    $('#subjectGroupDataTable').DataTable();
   });
 </script>
 {% endblock extrajs %}

@@ -8,7 +8,7 @@
 
 {% block content %}
 <!-- Page Header -->
-  <header class="masthead category-articles-masthead" 
+  <header class="masthead category-articles-masthead"
 		{% if category.featured_image %}
 		style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
 						url('{{ object.featured_image.url }}')"
@@ -47,8 +47,8 @@
 											</a>
 										</b>
 									</p>
-									<div class="metadata d-flex justify-content-between pr-4">
-										<small class="fsm muted mr-3">{{ article.created }}</small>
+									<div class="metadata d-flex justify-content-between pe-4">
+										<small class="fsm muted me-3">{{ article.created }}</small>
 										<!-- <small class="fsm muted">1500 VIEWS</small> -->
 									</div>
 								</div>

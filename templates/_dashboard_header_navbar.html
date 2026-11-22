@@ -21,7 +21,7 @@
     <ul class="nav-right">
       <li class="notifications dropdown">
         <span class="counter bgc-red">0</span>
-        <a href="" class="dropdown-toggle no-after" data-toggle="dropdown">
+        <a href="" class="dropdown-toggle no-after" data-bs-toggle="dropdown">
           <i class="fas fa-bell"></i>
         </a>
         <ul class="dropdown-menu">
@@ -38,7 +38,7 @@
                   </div>
                   <div class="peer peer-greed">
                     <span>
-                      <span class="fw-500">John Doe</span> 
+                      <span class="fw-500">John Doe</span>
                       <span class="c-grey-600">
                         liked your <span class="text-dark">post</span>
                       </span>
@@ -61,11 +61,11 @@
         </ul>
       </li>
       <li class="dropdown">
-        <a href="javascript:void(0);" class="dropdown-toggle no-after peers fxw-nw ai-c lh-1" 
-          data-toggle="dropdown"
+        <a href="javascript:void(0);" class="dropdown-toggle no-after peers fxw-nw ai-c lh-1"
+          data-bs-toggle="dropdown"
           aria-expanded="false">
           <div class="peer mR-10">
-            <img class="w-2r bdrs-50p" 
+            <img class="w-2r bdrs-50p"
               style="width: 36px; height: 36px; border-radius: 8px; object-fit: cover;"
             {% if user.profile.profile_picture %}
               src="{{ user.profile.profile_picture.url }}"
@@ -88,7 +88,7 @@
               <span>Onboarding / Setup wizard</span>
             </a>
             {% if request_institute and request_institute.onboarding_completed %}
-              <a href="{% url 'institute:institute_detail' institute_pk=request_institute.pk %}" 
+              <a href="{% url 'institute:institute_detail' institute_pk=request_institute.pk %}"
                 class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
                 <i class="fas fa-school mR-10"></i>
                 <span>School Profile</span>
@@ -119,7 +119,7 @@
           </li>
           <li role="separator" class="divider"></li>
           <li>
-            <a href="{% url 'account:logout' %}" 
+            <a href="{% url 'account:logout' %}"
               class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
               <i class="fas fa-sign-out-alt mR-10"></i>
               <span>Logout</span>

@@ -54,3 +54,5 @@ Use this Render service for the complete frontend. The forms and dashboards use 
 - https://render.com/docs/disks
 
 Django reports HSTS subdomain and preload warnings by default. Enable those policies only after verifying HTTPS for every domain affected. The build fails on deployment errors and displays these policy warnings for review.
+
+Frontend maintenance uses package-lock.json. Run npm ci --ignore-scripts and npm run vendor when changing browser dependencies, then commit the generated static assets. Render serves those files directly through WhiteNoise. The frontend security workflow audits npm packages and checks asset reproducibility.

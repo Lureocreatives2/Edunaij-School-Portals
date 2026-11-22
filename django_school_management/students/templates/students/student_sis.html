@@ -33,7 +33,7 @@
         </p>
       </div>
       <div class="col-auto">
-        {% if is_teacher_view %}<span class="badge badge-secondary mr-2">View only</span>{% endif %}
+        {% if is_teacher_view %}<span class="badge text-bg-secondary me-2">View only</span>{% endif %}
         {% for act in action_items %}
         {% if act.danger %}
         <form method="post" action="{{ act.url }}" class="d-inline" onsubmit="return confirm('Delete this student?');">
@@ -53,43 +53,43 @@
   <div class="col-md-6 col-lg-4 mb-3">
     <div class="card h-100">
       <div class="card-header d-flex align-items-center">
-        <i class="fas fa-arrow-up text-info mr-2"></i>
+        <i class="fas fa-arrow-up text-info me-2"></i>
         Progression / demotion
       </div>
       <div class="card-body">
         <p class="text-muted small mb-0">Class/semester history and promotions. Coming soon.</p>
-        <div class="mt-2 text-muted small"><i class="fas fa-clock mr-1"></i> Placeholder</div>
+        <div class="mt-2 text-muted small"><i class="fas fa-clock me-1"></i> Placeholder</div>
       </div>
     </div>
   </div>
   <div class="col-md-6 col-lg-4 mb-3">
     <div class="card h-100">
       <div class="card-header d-flex align-items-center">
-        <i class="fas fa-th-large text-warning mr-2"></i>
+        <i class="fas fa-th-large text-warning me-2"></i>
         Subject heatmap
       </div>
       <div class="card-body">
         <p class="text-muted small mb-0">Performance by subject across terms. Coming soon.</p>
-        <div class="mt-2 text-muted small"><i class="fas fa-clock mr-1"></i> Placeholder</div>
+        <div class="mt-2 text-muted small"><i class="fas fa-clock me-1"></i> Placeholder</div>
       </div>
     </div>
   </div>
   <div class="col-md-6 col-lg-4 mb-3">
     <div class="card h-100">
       <div class="card-header d-flex align-items-center">
-        <i class="fas fa-lightbulb text-secondary mr-2"></i>
+        <i class="fas fa-lightbulb text-secondary me-2"></i>
         Insights
       </div>
       <div class="card-body">
         <p class="text-muted small mb-0">Attendance, alerts, and recommendations. Coming soon.</p>
-        <div class="mt-2 text-muted small"><i class="fas fa-clock mr-1"></i> Placeholder</div>
+        <div class="mt-2 text-muted small"><i class="fas fa-clock me-1"></i> Placeholder</div>
       </div>
     </div>
   </div>
   <div class="col-md-6 col-lg-4 mb-3">
     <div class="card h-100">
       <div class="card-header d-flex align-items-center">
-        <i class="fas fa-book-open mr-2"></i>
+        <i class="fas fa-book-open me-2"></i>
         Enrolled subjects
       </div>
       <div class="card-body">

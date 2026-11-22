@@ -10,8 +10,8 @@
                     <table class="min-w-max w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6 text-left">Notice</th>
-                                <th class="py-3 px-6 text-left">Published at</th>
+                                <th class="py-3 px-6 text-start">Notice</th>
+                                <th class="py-3 px-6 text-start">Published at</th>
                                 <!-- <th class="py-3 px-6 text-center">Responders</th>
                                 <th class="py-3 px-6 text-center">Status</th>
                                 {% if user|has_role:'editor, admin' %}
@@ -20,13 +20,13 @@
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
-    
+
                             {% for notice in notices %}
                             <tr class="border-b border-gray-200 hover:bg-gray-100">
                                 <!-- notice name -->
-                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                <td class="py-3 px-6 text-start whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="mr-2">
+                                        <div class="me-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24"
                                                 viewBox="0 0 48 48" style=" fill:#000000;">
                                                 <path fill="#80deea"
@@ -49,7 +49,7 @@
                                     </div>
                                 </td>
                                 <!-- published date -->
-                                <td class="py-3 px-6 text-left">
+                                <td class="py-3 px-6 text-start">
                                     <div class="flex items-center">
                                         <span>
                                             <a href="{% url 'notices:notice_detail' pk=notice.pk %}">
@@ -74,7 +74,7 @@
                                     </td>
                                     <!-- status -->
                                     <td class="py-3 px-6 text-center">
-                                        
+
                                         {% if notice.is_past_due %}
                                             <span class="bg-red-200 text-red-600 py-1 px-3 rounded-full text-xs">Inactive</span>
                                         {% else %}
@@ -85,7 +85,7 @@
                                     {% if user|has_role:'editor, admin' %}
                                     <td class="py-3 px-6 text-center">
                                         <div class="flex item-center justify-center">
-                                            <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                            <div class="w-4 me-2 transform hover:text-purple-500 hover:scale-110">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -94,14 +94,14 @@
                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                                 </svg>
                                             </div>
-                                            <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                            <div class="w-4 me-2 transform hover:text-purple-500 hover:scale-110">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                 </svg>
                                             </div>
-                                            <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                            <div class="w-4 me-2 transform hover:text-purple-500 hover:scale-110">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -114,7 +114,7 @@
                                 {% endcomment %}
                             </tr>
                             {% endfor %}
-    
+
                         </tbody>
                     </table>
                 </div>
@@ -122,4 +122,4 @@
         </div>
     </div>
 {% endblock content %}
-    
+

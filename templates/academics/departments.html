@@ -58,7 +58,7 @@
             <div class="card-body">
                 <h6 class="card-title">Quick add</h6>
                 <p class="small text-muted mb-2">Or add a {{ department_label|lower }} here without leaving the page.</p>
-                <a href="" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#addDeptModal">Add new {{ department_label|lower }}</a>
+                <a href="" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addDeptModal">Add new {{ department_label|lower }}</a>
             </div>
         </div>
         <div class="modal fade" id="addDeptModal" tabindex="-1" role="dialog" aria-labelledby="addDeptModalLabel" aria-hidden="true">
@@ -66,9 +66,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addDeptModalLabel">Add New {{ department_label }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="" method="post" enctype="multipart/form-data">

@@ -67,7 +67,7 @@ graphene-django==3.2.3
 graphene==3.4.3
 graphql-core==3.2.12
 graphql-relay==3.2.0
-gunicorn==26.2.0
+gunicorn==27.0.1
 html5lib==1.1
 idna==3.19
 inflection==0.5.1

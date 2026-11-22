@@ -184,7 +184,7 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django_prometheus.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://{env("REDIS_HOST")}:{env("REDIS_PORT")}/0',
+        'LOCATION': f'redis://{env("REDIS_HOST", default="127.0.0.1")}:{env("REDIS_PORT", default="6379")}/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
@@ -224,7 +224,7 @@ ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = env('TIME_ZONE')
+TIME_ZONE = env('TIME_ZONE', default='Africa/Lagos')
 
 USE_I18N = True
 
@@ -248,16 +248,18 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger'
 }
 
-MEDIA_ROOT = str(BASE_DIR / 'media')
+MEDIA_ROOT = env('MEDIA_ROOT', default=str(BASE_DIR / 'media'))
 MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='webmaster@localhost')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = env('EMAIL_HOST', default='localhost')
+EMAIL_PORT = env('EMAIL_PORT', default='587')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 
 # login/register redirects
 
@@ -384,12 +386,12 @@ if USE_STRIPE:
 
 # CELERY BROKER CONFIG
 try:
-    CELERY_BROKER_URL = env('CELERY_BROKER_URL')
-    CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+    CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://127.0.0.1:6379/0')
+    CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default='redis://127.0.0.1:6379/0')
     CELERY_ACCEPT_CONTENT = ['application/json']
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
-    CELERY_TIMEZONE = 'Asia/Dhaka'
+    CELERY_TIMEZONE = TIME_ZONE
 except ImproperlyConfigured:
     raise ImproperlyConfigured(settings_message_constants.INCORRECT_CELERY_REDIS_SETUP_MESSAGE)
 
@@ -414,9 +416,9 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 IS_DEMO_ENV = env('IS_DEMO_ENV')
-DEMO_SUPERUSER_USERNAME = env('DEMO_SUPERUSER_USERNAME')
-DEMO_SUPERUSER_EMAIL = env('DEMO_SUPERUSER_EMAIL')
-DEMO_SUPERUSER_PASSWORD = env('DEMO_SUPERUSER_PASSWORD')
+DEMO_SUPERUSER_USERNAME = env('DEMO_SUPERUSER_USERNAME', default='')
+DEMO_SUPERUSER_EMAIL = env('DEMO_SUPERUSER_EMAIL', default='')
+DEMO_SUPERUSER_PASSWORD = env('DEMO_SUPERUSER_PASSWORD', default='')
 
 
 # ==========================================

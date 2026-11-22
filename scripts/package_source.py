@@ -6,8 +6,8 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORIES = ('config', 'context_processors', 'django_school_management', 'permission_handlers', 'utilities', 'templates', 'static', 'tests', 'scripts', '.github', 'requirements', 'docs/public')
-FILES = ('README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'THIRD_PARTY_NOTICES.md', 'CHANGELOG.md', 'CODE_OF_CONDUCT.md', '.env.example', '.gitignore', '.dockerignore', 'manage.py', 'requirements.txt', 'requirements_minimal.txt', 'setup.cfg', '.coveragerc', 'LICENSE', 'LICENSE.md', 'LICENSE.txt', 'django_school_management/institute/fixtures/bd_cities.json')
-EXTENSIONS = {'.py', '.html', '.css', '.js', '.map', '.json', '.txt', '.md', '.rst', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.otf', '.yml', '.yaml', '.cfg', '.scss', '.less'}
+FILES = ('.gitattributes', 'render.yaml', 'pre-deploy.sh', 'README.md', 'CONTRIBUTING.md', 'SECURITY.md', 'THIRD_PARTY_NOTICES.md', 'CHANGELOG.md', 'CODE_OF_CONDUCT.md', '.env.example', '.gitignore', '.dockerignore', 'manage.py', 'requirements.txt', 'requirements_minimal.txt', 'setup.cfg', '.coveragerc', 'LICENSE', 'LICENSE.md', 'LICENSE.txt', 'django_school_management/institute/fixtures/bd_cities.json')
+EXTENSIONS = {'.py', '.html', '.css', '.js', '.map', '.json', '.txt', '.md', '.rst', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.otf', '.yml', '.yaml', '.cfg', '.sh', '.scss', '.less'}
 def allowed(path):
     rel = path.relative_to(ROOT)
     parts = rel.parts

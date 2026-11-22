@@ -3,8 +3,6 @@ from django_school_management.tenants.scoping import request_institute
 from django.http import HttpResponse
 import logging
 
-from sslcommerz_lib import SSLCOMMERZ
-from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -15,12 +13,6 @@ from django_school_management.students.models import AdmissionStudent
 from django_school_management.payments.models import SSLPayment
 
 logger = logging.getLogger(__name__)
-
-ssl_settings = {
-    'store_id': settings.STORE_ID,
-    'store_pass': settings.STORE_PASS,
-    'issandbox': settings.SSL_ISSANDBOX,
-}
 
 
 def _store_admission_pay_record(post_body, institute):

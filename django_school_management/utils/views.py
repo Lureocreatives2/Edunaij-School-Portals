@@ -24,7 +24,7 @@ def health_view(request):
             cursor.execute("SELECT 1")
         checks["database"] = "ok"
     except Exception as e:
-        checks["database"] = str(e)
+        checks["database"] = "unavailable"
         status = "degraded"
         code = 503
 
@@ -34,7 +34,7 @@ def health_view(request):
             raise Exception("cache read/write failed")
         checks["cache"] = "ok"
     except Exception as e:
-        checks["cache"] = str(e)
+        checks["cache"] = "unavailable"
         status = "degraded"
         code = 503
 

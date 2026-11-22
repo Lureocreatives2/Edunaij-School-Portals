@@ -84,6 +84,10 @@ The packaging script builds a ZIP, file manifest and SHA256 checksum under `dist
 
 [Architecture](docs/public/ARCHITECTURE.md) · [Deployment checklist](docs/public/DEPLOYMENT.md) · [GitHub publishing](docs/public/GITHUB.md) · [Contributing](CONTRIBUTING.md) · [Security reporting](SECURITY.md)
 
+## Deploy the website
+
+The Render Blueprint serves the landing page, registration and dashboards together with their frontend assets. It provisions PostgreSQL, a Redis-compatible cache and persistent uploads. Review the paid resource plans and configure SMTP before applying it. Follow the [Render deployment guide](docs/public/RENDER.md).
+
 ## Developer and partnerships
 
 **Developed by Adeshina Opeyemi.** For school onboarding, a product walkthrough or a partnership, email [opeyemiolamide882@gmail.com](mailto:opeyemiolamide882@gmail.com). Developer profile: [Lureocreatives2](https://github.com/Lureocreatives2).

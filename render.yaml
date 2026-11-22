@@ -1,0 +1,68 @@
+# Review paid resources in Render before applying this Blueprint.
+services:
+  - type: web
+    name: edunaij
+    runtime: python
+    plan: 0.5c-512mb
+    region: frankfurt
+    buildCommand: bash scripts/render-build.sh
+    startCommand: bash scripts/render-start.sh
+    healthCheckPath: /health/
+    disk:
+      name: edunaij-uploads
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.4
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: edunaij-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: edunaij-cache
+          property: connectionString
+      - key: MEDIA_ROOT
+        value: /var/data/media
+      - key: ALLOWED_HOSTS
+        value: ""
+      - key: CSRF_TRUSTED_ORIGINS
+        value: ""
+      - key: PLATFORM_HOSTS
+        value: ""
+      - key: PROMETHEUS_EXPORT_MIGRATIONS
+        value: "False"
+      - key: USE_PAYMENT_OPTIONS
+        value: "False"
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+  - type: keyvalue
+    name: edunaij-cache
+    plan: 256mb
+    region: frankfurt
+    ipAllowList: []
+    maxmemoryPolicy: noeviction
+databases:
+  - name: edunaij-db
+    plan: 0.1c-256mb
+    region: frankfurt
+    diskSizeGB: 1
+    databaseName: edunaij
+    user: edunaij
+    ipAllowList: []

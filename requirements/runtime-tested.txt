@@ -4,7 +4,7 @@ arabic-reshaper==3.0.1
 asgiref==3.12.1
 asn1crypto==1.5.1
 beautifulsoup4==4.15.0
-billiard==4.2.4
+billiard==4.3.2
 braintree==4.46.0
 brotli==1.2.1
 celery==5.6.3

@@ -86,6 +86,8 @@ The packaging script builds a ZIP, file manifest and SHA256 checksum under `dist
 
 ## Deploy the website
 
+For a usage-limited free preview on Railway, follow the [Railway deployment guide](docs/public/RAILWAY.md). The Docker profile includes PostgreSQL-backed caching, secure initial platform-owner creation and optional HTTPS email delivery. Review the free-plan upload and data-retention limits before inviting schools.
+
 The Render Blueprint serves the landing page, registration and dashboards together with their frontend assets. It provisions PostgreSQL, a Redis-compatible cache and persistent uploads. Review the paid resource plans and configure SMTP before applying it. Follow the [Render deployment guide](docs/public/RENDER.md).
 
 ## Developer and partnerships

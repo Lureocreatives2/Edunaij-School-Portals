@@ -1,0 +1,76 @@
+name: Railway deployment readiness
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'config/**'
+      - 'requirements/**'
+      - 'requirements*.txt'
+      - 'scripts/railway-start.sh'
+      - 'django_school_management/accounts/management/**'
+      - 'django_school_management/communications/email_backend.py'
+      - '.github/workflows/railway-readiness.yml'
+  pull_request:
+    paths:
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'config/**'
+      - 'requirements/**'
+      - 'requirements*.txt'
+      - 'scripts/railway-start.sh'
+      - 'django_school_management/accounts/management/**'
+      - 'django_school_management/communications/email_backend.py'
+      - '.github/workflows/railway-readiness.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:17-bookworm
+        env:
+          POSTGRES_DB: edunaij_ci
+          POSTGRES_USER: edunaij_ci
+          POSTGRES_PASSWORD: ci-only-temporary-database
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U edunaij_ci -d edunaij_ci"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Build Linux deployment image
+        run: docker build -t edunaij-railway-check .
+      - name: Start against disposable PostgreSQL
+        run: |
+          docker run -d --name edunaij-check --network host \
+            -e SECRET_KEY=ci-only-not-for-deployment-8h2R5z6Y7p4B9q1X3m0V8c2L5k7F9w1N \
+            -e DATABASE_URL=postgresql://edunaij_ci:ci-only-temporary-database@127.0.0.1:5432/edunaij_ci \
+            -e RAILWAY_PUBLIC_DOMAIN=edunaij-ci.up.railway.app \
+            -e ALLOW_EPHEMERAL_MEDIA=True -e MEDIA_ROOT=/app/media \
+            -e USE_PAYMENT_OPTIONS=False -e USE_STRIPE=False \
+            -e BOOTSTRAP_PLATFORM_OWNER=True \
+            -e DJANGO_SUPERUSER_USERNAME=ci-platform-owner \
+            -e DJANGO_SUPERUSER_EMAIL=owner@example.test \
+            -e DJANGO_SUPERUSER_PASSWORD=CI-only-bootstrap-94-unique-cloud \
+            edunaij-railway-check
+      - name: Check real database, shared cache and frontend
+        run: |
+          curl --fail --retry 60 --retry-delay 4 --retry-all-errors \
+            -H 'Host: healthcheck.railway.app' http://127.0.0.1:8000/health/
+          curl --fail -H 'Host: edunaij-ci.up.railway.app' \
+            -H 'X-Forwarded-Proto: https' http://127.0.0.1:8000/ -o /dev/null
+          curl --fail -H 'Host: edunaij-ci.up.railway.app' \
+            -H 'X-Forwarded-Proto: https' http://127.0.0.1:8000/static/edunaij/landing.css -o /dev/null
+      - name: Show startup logs on failure
+        if: failure()
+        run: docker logs edunaij-check || true
+      - name: Stop test container
+        if: always()
+        run: docker rm -f edunaij-check || true

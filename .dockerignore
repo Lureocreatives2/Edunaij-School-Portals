@@ -1,4 +1,7 @@
 .git
+.aws
+.codex
+.agents
 .env*
 !.env.example
 envs/.env*
@@ -10,6 +13,7 @@ staticfiles
 __pycache__
 *.pyc
 *.sqlite3*
+*.db
 *.rdb
 *.log
 *.pem

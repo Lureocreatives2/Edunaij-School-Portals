@@ -15,6 +15,6 @@
     "datatables.net": "3.1.5",
     "datatables.net-bs5": "3.1.5",
     "jquery": "3.8.0",
-    "select2": "4.1.1"
+    "select2": "4.2.0"
   }
 }
